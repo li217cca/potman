@@ -1053,8 +1053,6 @@ function updateSettings(callback) {
         else {
             currentSettings = settings;
         }
-        if (applyPassword)
-            applyPassword(settings.password);
         if (callback)
             callback(settings);
         sendExternalMessage({

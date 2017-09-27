@@ -98,8 +98,6 @@ function handleNewPageInner() {
             updateRaidsPanel();
         if (updateStatusPanel)
             updateStatusPanel(false, true);
-        if (updateItemsPanel)
-            updateItemsPanel();
     }, 500);
     findOrShowPopout(true);
     if ((hash.indexOf("/supporter/") >= 0) ||

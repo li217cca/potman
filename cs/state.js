@@ -65,7 +65,9 @@ conn.onMessage.addListener(event => {
         //     break
         // }
         case "copyRaid": {
-            tryJoinRaid(event.raidCode)
+            if (state.prprRun()) {        
+                tryJoinRaid(event.raidCode)
+            }
             break
         }
     }

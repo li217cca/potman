@@ -7,7 +7,6 @@ var externalChannel = null, isChannelReady = false;
 var scriptSandbox = null, overlayContainer = null, raidOverlayContainer = null;
 var pendingExternalMessages = [];
 var areModulesOk = true;
-var applyPassword = null;
 var luckyDay = false;
 var releaseMode = false;
 try {
@@ -182,18 +181,6 @@ function finishChannelSetup(secretToken) {
         externalChannel.port1.postMessage(pendingExternalMessages[i]);
     pendingExternalMessages.length = 0;
     _loadShaScript(window);
-    applyPassword = function (password) {
-        if (!password || password.trim().length === 0)
-            return;
-        var isValid = isValidPassword(password);
-        sendExternalMessage({
-            type: "setResigned",
-            secretToken: isValid ? secretToken : 0
-        });
-        if (!isValid)
-            log("Password verified");
-    };
-    areYouFeelingLucky();
     // FIXME: This causes the GC to eventually randomly collect things and
     //  everything breaks
     // if (releaseMode)
