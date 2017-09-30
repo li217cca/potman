@@ -27,8 +27,8 @@ const ObserverRegister = (() => {
     setInterval(() => {
         checkFunctions.forEach(callback => callback())
     }, 500)
-    const observer = new MutationObserver(mutations => checkFunctions.forEach(callback => callback()))
-    observer.observe(document.body, {childList: true, subtree: true, attributes: true, characterData: true, attributeFilter: ["class", "id"]})
+    // const observer = new MutationObserver(mutations => checkFunctions.forEach(callback => callback()))
+    // observer.observe(document.body, {childList: true, subtree: true, attributes: true, characterData: true, attributeFilter: ["class", "id"]})
     return {
         register: checkFunc => (checkFunctions.add(checkFunc), () => {
             log("delete func")
@@ -138,8 +138,10 @@ const newSandbox = (() => {
     log("init external sandbox")
     // init external sandbox
     const sandboxParent = document.createElement("div")
+
     document.documentElement.appendChild(sandboxParent)
     const scriptSandbox = document.createElement("iframe")
+    scriptSandbox.id = "myss"
     scriptSandbox.style = "display: none"
     sandboxParent.createShadowRoot().appendChild(scriptSandbox);
 
@@ -171,23 +173,54 @@ const newSandbox = (() => {
             }, "*", [externalChannel.port2])
         })
     })
+    const sendExternalMessage = msg => {
+        log("sanbox sendExternalMessage", msg)
+        if (!externalChannel || !isChannelReady) {
+            pendingExternalMessages.push(msg);
+            return;
+        }
+        externalChannel.port1.postMessage(msg);
+    }
     return {
         finishChannelSetup: () => {
             log("sanbox finishChannelSetup")
-            isChannelReady = true;
+            doPopup("沙盒加载成功")
+            isChannelReady = true
             for (var i = 0, l = pendingExternalMessages.length; i < l; i++)
                 externalChannel.port1.postMessage(pendingExternalMessages[i]);
             pendingExternalMessages.length = 0;
             _loadShaScript(window);
         },
-        sendExternalMessage: msg => {
-            log("sanbox sendExternalMessage", msg)
-            if (!externalChannel || !isChannelReady) {
-                pendingExternalMessages.push(msg);
-                return;
-            }
-            externalChannel.port1.postMessage(msg);
-        }
+        sendExternalMessage: sendExternalMessage
     }
 })
 const sandbox = newSandbox()
+
+var pops = null, pendingPopup = []
+waitForElementToExist("body", () => {
+    pops = document.createElement("div")
+    pops.style.position = "fixed"
+    pops.style.left = "75px"
+    pops.style.color = "#FEF"
+    pops.style.zIndex = 999999
+    pops.style.fontSize = "20px"
+    pops.style.borderRadius = "4px"
+    pops.style.backgroundColor = "#333"
+    pops.style.opacity = 0.8
+    document.body.appendChild(pops)
+    pendingPopup.forEach(f => f())
+    pendingPopup = []
+}, true)
+const doPopup = msg => {
+    const func = () => {
+        const div = document.createElement("div")
+        div.innerText = msg.toString()
+        pops.appendChild(div)
+        setTimeout(() => {
+            pops.removeChild(div)
+        }, 3000)
+    }
+    if (!!pops) {
+        func()
+    } else pendingPopup.push(func)
+}

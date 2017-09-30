@@ -10,7 +10,7 @@
       "cs/auto_battle.js"
     ],
     "matches": [ "http://gbf.game.mbga.jp/*", "http://game.granbluefantasy.jp/*"],
-    "run_at": "document_end"
+    "run_at": "document_start"
   }, {
     "js": ["cs/prpr_content.js", "jquery-2.0.3.min.js"],
     "matches": ["http://prpr.fkgbf.net/"],
