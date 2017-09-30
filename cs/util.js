@@ -214,7 +214,7 @@ waitForElementToExist("body", () => {
 const doPopup = msg => {
     const func = () => {
         const div = document.createElement("div")
-        div.innerText = msg.toString()
+        div.innerHTML = msg.toString()
         pops.appendChild(div)
         setTimeout(() => {
             pops.removeChild(div)

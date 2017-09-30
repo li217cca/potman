@@ -186,6 +186,7 @@ const tryJoinRaid = (code) => {
         if (typeof (resp) === "string") resp = JSON.parse(resp)
 
         if (resp.popup && resp.popup.body) {
+            doPopup(resp.popup.body)
             return log("popup: " + resp.popup.body)
         }
         if (resp.redirect) {
@@ -216,11 +217,14 @@ const tryJoinRaid = (code) => {
             return log("to: " + resp.redirect)
         }
         if ((typeof (resp.current_battle_point) === "number") && !resp.battle_point_check) {
+            doPopup("Refill required, need " + resp.used_battle_point + "bp")
             return log("Refill required, need " + resp.used_battle_point + "bp");
         }
         if (resp.idleTimeout) {
+            doPopup("tryJoinRaid idle timeout")
             return log("tryJoinRaid idle timeout");
         }
+        doPopup("tryJoinRaid unknown response: " + JSON.stringify(resp))
         return log("tryJoinRaid unknown response: " + JSON.stringify(resp))
     })
 }
