@@ -175,6 +175,7 @@ const tryJoinRaid = (code) => {
     if (typeof code !== "string" || code.length !==8) return
     log("try join raid", code)
 
+    lock = new Date()
     var payload = {
         special_token: null, 
         battle_key: code
@@ -187,6 +188,7 @@ const tryJoinRaid = (code) => {
 
         if (resp.popup && resp.popup.body) {
             doPopup(resp.popup.body)
+            lock = false
             return log("popup: " + resp.popup.body)
         }
         if (resp.redirect) {
@@ -219,16 +221,25 @@ const tryJoinRaid = (code) => {
         if ((typeof (resp.current_battle_point) === "number") && !resp.battle_point_check) {
             doPopup("Refill required, need " + resp.used_battle_point + "bp")
             log("Refill required, need " + resp.used_battle_point + "bp")
-            log("return bp")
-            return "bp"
+
+            log("unlisten because bp")
+            unlisten = true
+            setTimeout(() => {
+                log("re listen ...")
+                unlisten = false
+            }, 1000 * (1200 + Math.random() * 2000))
+            lock = false
+            return
         }
         if (resp.idleTimeout) {
             doPopup("tryJoinRaid idle timeout")
             log("tryJoinRaid idle timeout")
+            lock = false
             return 
         }
         doPopup("tryJoinRaid unknown response: " + JSON.stringify(resp))
         log("tryJoinRaid unknown response: " + JSON.stringify(resp))
+        lock = false
         return 
     })
 }
@@ -265,7 +276,6 @@ const joinRaid = (url, supporterID) => {
     doClientAjax("quest/raid_deck_data_create", JSON.stringify(options), resp => {
         log("join raid resp=", resp)
         if (resp.result) {
-            lock = new Date()
             window.location.href = "#raid_multi/" + resp.raid_id
             waitForElementToExist(".btn-attack-start.display-on", () => {
                 log("raid click attack once")
