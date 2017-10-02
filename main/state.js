@@ -62,8 +62,10 @@ conn.onMessage.addListener(event => {
         case "listenRaid": {
             log("listen raid", event.raidCode)
             if (state.prprAutoRun() && !unlisten) {        
-                tmp = tryJoinRaid(event.raidCode)
+                const tmp = tryJoinRaid(event.raidCode)
+                log("tmp", tmp)
                 if (tmp == "bp") {
+                    log("unlisten because bp")
                     unlisten = true
                     setTimeout(() => {unlisten = false}, 1000 * (1200 + Math.random() * 2000))
                 }

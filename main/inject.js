@@ -219,6 +219,7 @@ const tryJoinRaid = (code) => {
         if ((typeof (resp.current_battle_point) === "number") && !resp.battle_point_check) {
             doPopup("Refill required, need " + resp.used_battle_point + "bp")
             log("Refill required, need " + resp.used_battle_point + "bp")
+            log("return bp")
             return "bp"
         }
         if (resp.idleTimeout) {
