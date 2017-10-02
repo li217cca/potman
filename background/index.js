@@ -1,27 +1,7 @@
 
 var popConn = null, contentConn = null
-const state = {
-    run: true,     // all run need, exceipt log
-    observe: true, // observer run need
-    speed: 1,      
-    prpr: false,
-    captcha: false,
-    error: false,
-    coop: {
-        run: false,
-        first: false
-    },
-    auto_battle: false
-    // listen: {
-    //     repeat: true,
-    //     attack: true,
-    //     skill: false,
-    //     result: true,
-    //     coop: true,
-    //     prepare: true,
-    //     start: true
-    // }
-}
+const state = default_state
+
 const preState = localStorage.getItem("options")
 Object.assign(state, preState)
 const refreshState = () => {
@@ -68,6 +48,12 @@ chrome.runtime.onConnect.addListener(function(conn) {
                 break
             }
             case "copyRaid": {
+                if (contentConn) {
+                    contentConn.postMessage(event)
+                }
+                break
+            }
+            case "listenRaid": {
                 if (contentConn) {
                     contentConn.postMessage(event)
                 }

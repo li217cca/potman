@@ -60,6 +60,7 @@ conn.onMessage.addListener(event => {
             break
         }
         case "listenRaid": {
+            log("listen raid", event.raidCode)
             if (state.prprAutoRun() && !unlisten) {        
                 tmp = tryJoinRaid(event.raidCode)
                 if (tmp == "bp") {
