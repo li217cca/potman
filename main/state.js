@@ -1,26 +1,13 @@
 
 const state = (() => {
-    const s = {
-        run: false,     // all run need, exceipt log
-        observe: true, // observer run need
-        speed: 1,      
-        prpr: false,
-        captcha: false,
-        error: false,
-        coop: {
-            run: false,
-            first: false
-        },
-        auto_battle: false,
-    
-        onlog: true     // log run need
-    }
+    const s = default_state
     const listeners = []
     const stateRun = () => s.run && !s.captcha && !s.error
     return {
         run: () => stateRun(),
         observeRun: () => stateRun() && s.observe,
         prprRun: () => stateRun() && s.prpr,
+        prprAutoRun: () => stateRun() && s.prpr_auto,
         logRun: () => s.onlog,
         coop: {
             run: () => stateRun() && s.coop.run,
@@ -28,6 +15,7 @@ const state = (() => {
             first: () => s.coop.first
         },
         auto_battle: () => stateRun() && s.auto_battle,
+        auto_confirm_pending: () => stateRun() && s.auto_confirm_pending,
         set: (obj) => {
             Object.assign(s, obj)
             listeners.forEach(listener => listener())
@@ -66,6 +54,12 @@ conn.onMessage.addListener(event => {
         // }
         case "copyRaid": {
             if (state.prprRun()) {        
+                tryJoinRaid(event.raidCode)
+            }
+            break
+        }
+        case "listenRaid": {
+            if (state.prprAutoRun()) {        
                 tryJoinRaid(event.raidCode)
             }
             break

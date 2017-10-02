@@ -11,7 +11,7 @@ const moduleIds = {
 };
 // logger
 function log(...args) {
-    if (!state.logRun() || args.length < 1) return
+    if (args.length < 1) return
     var time = new Date()
     console.info("[" + time.toLocaleString() + "]", ...args)
 }

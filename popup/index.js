@@ -1,14 +1,4 @@
-const state = {
-    run: false,
-    observe: false,
-    speed: 1,
-    prpr: false,
-    coop: {
-        run: false,
-        first: false
-    },
-    auto_battle: false
-}
+const state = {}
 
 const conn = chrome.runtime.connect()
 conn.onMessage.addListener(event => {
@@ -33,11 +23,9 @@ const refresh = () => {
     refreshMethods.forEach(method => method())
 }
 
+const loadFunc = []
 const onLoad = () => {
-    processRunButton()
-    processPrprButton()
-    processCoopButton()
-    processAutoBattleButton()
+    loadFunc.forEach(f => f())
     refresh()
 }
 
@@ -58,6 +46,7 @@ const processRunButton = () => {
         runButton.innerText = state.run ? "停止" : "运行"
     })
 }
+loadFunc.push(processRunButton)
 
 const processPrprButton = () => {
     const prprButton = document.createElement("button")
@@ -74,6 +63,24 @@ const processPrprButton = () => {
         prprButton.innerText = state.prpr ? "停止prpr" : "运行prpr"
     })
 }
+loadFunc.push(processPrprButton)
+
+const processAutoPrprButton = () => {
+    const button = document.createElement("button")
+    button.onclick = () => {
+        conn.postMessage({
+            type: "setState", 
+            state: {prpr_auto: !state.prpr_auto}}
+        )
+    }
+    button.innerText = "loading.."
+    document.body.appendChild(button)
+
+    refreshMethods.push(() => {
+        button.innerText = state.prpr_auto ? "停止自动prpr" : "运行自动prpr"
+    })
+}
+loadFunc.push(processAutoPrprButton)
 
 // {
 //     run: false,
@@ -104,6 +111,7 @@ const processCoopButton = () => {
         firstButton.innerText = state.coop.first ? "coop非尾刀" : "coop尾刀"
     })
 }
+loadFunc.push(processCoopButton)
 
 const processAutoBattleButton = () => {
     const button = document.createElement("button")
@@ -120,3 +128,22 @@ const processAutoBattleButton = () => {
         button.innerText = state.auto_battle ? "自动战斗开启" : "自动战斗关闭"
     })
 }
+loadFunc.push(processAutoBattleButton)
+
+
+const processConfirmPending = () => {
+    const button = document.createElement("button")
+    button.onclick = () => {
+        conn.postMessage({
+            type: "setState", 
+            state: {auto_confirm_pending: !state.auto_confirm_pending}
+        })
+    }
+    button.innerText = "loading.."
+    document.body.appendChild(button)
+
+    refreshMethods.push(() => {
+        button.innerText = state.auto_confirm_pending ? "自动确认Raids〇" : "自动确认Raids✕"
+    })
+}
+loadFunc.push(processConfirmPending)

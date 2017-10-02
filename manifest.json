@@ -1,18 +1,24 @@
 {
   "content_scripts": [ {
-    "js": [ "jquery-2.0.3.min.js", 
-      "cs/external.js",
-      "cs/sha_dev.js",
-      "cs/state.js",
-      "cs/inject.js",
-      "cs/util.js",
-      "cs/coopraid.js",
-      "cs/auto_battle.js"
+    "js": [ 
+      "public/jquery-2.0.3.min.js", 
+      "public/common.js",
+      "main/external.js",
+      "main/sha_dev.js",
+      "main/state.js",
+      "main/inject.js",
+      "main/util.js",
+      "main/coopraid.js",
+      "main/auto_battle.js"
     ],
     "matches": [ "http://gbf.game.mbga.jp/*", "http://game.granbluefantasy.jp/*"],
     "run_at": "document_start"
   }, {
-    "js": ["cs/prpr_content.js", "jquery-2.0.3.min.js"],
+    "js": [
+      "public/common.js",
+      "public/jquery-2.0.3.min.js",
+      "prpr/index.js"
+    ],
     "matches": ["http://prpr.fkgbf.net/"],
     "run_at": "document_start",
     "all_frames": true
@@ -21,18 +27,22 @@
   "version": "0.0.1",
   "description": "科技罐头人",
   "background": {
-    "scripts": ["bg/server.js", "jquery-2.0.3.min.js"],
+    "scripts": [
+      "public/common.js",
+      "public/jquery-2.0.3.min.js",
+      "background/index.js"
+    ],
     "persistent": false
   },
   "browser_action": {
       "default_title": "科技罐头人",
-      "default_icon": "icon.png",
-      "default_popup": "pop/popup.html"
+      "default_icon": "resource/icon.png",
+      "default_popup": "popup/index.html"
   },
   "manifest_version": 2,
   "web_accessible_resources": [
-    "content/*",
-    "icon.png",
-    "icon-on.png"
+    "resource/*",
+    "resource/icon.png",
+    "resource/icon-on.png"
   ]
 }

@@ -231,8 +231,18 @@ const tryJoinRaid = (code) => {
 
 // {"":null,"raid_id":"3378935189","supporter_user_id":15380563,"user_deck_priority":31,"select_bp":"2","duplicate_key":1,"supporter_attribute_id":0}
 
+
+let lock = false
+
 const attack = () => {
     pressBySelector(".btn-attack-start.display-on")
+    setTimeout(() => {
+        waitForElementToExist(".btn-auto", function () {
+            log("点击自动")
+            pressBySelector(".btn-auto")
+            lock = false
+        }, true)
+    }, 300)
 }
 const joinRaid = (url, supporterID) => {
     const raid_id = url.slice(url.indexOf("supporter_raid") + 15, url.indexOf("/", url.indexOf("supporter_raid") + 15))
@@ -249,6 +259,7 @@ const joinRaid = (url, supporterID) => {
     doClientAjax("quest/raid_deck_data_create", JSON.stringify(options), resp => {
         log("join raid resp=", resp)
         if (resp.result) {
+            lock = new Date()
             window.location.href = "#raid_multi/" + resp.raid_id
             waitForElementToExist(".btn-attack-start.display-on", () => {
                 log("raid click attack once")
@@ -257,7 +268,20 @@ const joinRaid = (url, supporterID) => {
         } else log("join raid error")
     })
 }
-
+let time = 0
+const autoConfirm = () => {
+    if (!state.auto_confirm_pending()) return
+    if (lock !== false && (new Date - lock) < 10000) return
+    log("try auto confirm")
+    location.href = "/#quest/assist/unclaimed"
+    waitForElementToExist(".btn-multi-raid.lis-raid", () => {
+        setTimeout(() => {
+            log("press confirm raid.. time = ", ++time)
+            pressBySelector(".btn-multi-raid.lis-raid")
+        }, 1341)
+    }, true)
+}
+setInterval(autoConfirm, 5000)
 
 listenAjaxComplete(data => {
     if (data.url.indexOf("/user/status") >= 0) {
