@@ -30,6 +30,7 @@ const status = {}
     
 
 const conn = chrome.runtime.connect()
+let unlisten = false
 conn.onMessage.addListener(event => {
     log("get", event)
     switch (event.type) {
@@ -59,8 +60,12 @@ conn.onMessage.addListener(event => {
             break
         }
         case "listenRaid": {
-            if (state.prprAutoRun()) {        
-                tryJoinRaid(event.raidCode)
+            if (state.prprAutoRun() && !unlisten) {        
+                tmp = tryJoinRaid(event.raidCode)
+                if (tmp == "bp") {
+                    unlisten = true
+                    setTimeout(() => {unlisten = false}, 1000 * (1200 + Math.random() * 2000))
+                }
             }
             break
         }

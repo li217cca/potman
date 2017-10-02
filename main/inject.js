@@ -218,14 +218,17 @@ const tryJoinRaid = (code) => {
         }
         if ((typeof (resp.current_battle_point) === "number") && !resp.battle_point_check) {
             doPopup("Refill required, need " + resp.used_battle_point + "bp")
-            return log("Refill required, need " + resp.used_battle_point + "bp");
+            log("Refill required, need " + resp.used_battle_point + "bp")
+            return "bp"
         }
         if (resp.idleTimeout) {
             doPopup("tryJoinRaid idle timeout")
-            return log("tryJoinRaid idle timeout");
+            log("tryJoinRaid idle timeout")
+            return 
         }
         doPopup("tryJoinRaid unknown response: " + JSON.stringify(resp))
-        return log("tryJoinRaid unknown response: " + JSON.stringify(resp))
+        log("tryJoinRaid unknown response: " + JSON.stringify(resp))
+        return 
     })
 }
 
@@ -234,6 +237,7 @@ const tryJoinRaid = (code) => {
 
 let lock = false
 
+let pendingNum = 0
 const attack = () => {
     pressBySelector(".btn-attack-start.display-on")
     setTimeout(() => {
@@ -241,6 +245,7 @@ const attack = () => {
             log("点击自动")
             pressBySelector(".btn-auto")
             lock = false
+            pendingNum ++
         }, true)
     }, 300)
 }
@@ -270,14 +275,16 @@ const joinRaid = (url, supporterID) => {
 }
 let time = 0
 const autoConfirm = () => {
-    if (!state.auto_confirm_pending()) return
+    if (!state.auto_confirm_pending() || pendingNum === 0) return
     if (lock !== false && (new Date - lock) < 10000) return
     log("try auto confirm")
     location.href = "/#quest/assist/unclaimed"
-    waitForElementToExist(".btn-multi-raid.lis-raid", () => {
+    waitForElementToExist(".btn-multi-raid.lis-raid", (targets) => {
+        pendingNum = document.querySelectorAll(".btn-multi-raid.lis-raid").length
         setTimeout(() => {
             log("press confirm raid.. time = ", ++time)
             pressBySelector(".btn-multi-raid.lis-raid")
+            pendingNum --
         }, 1341)
     }, true)
 }
