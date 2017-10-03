@@ -1,13 +1,10 @@
-
-
-
 onload = () => {
     console.log("onload..")
     const conn = chrome.runtime.connect()
 
     conn.onMessage.addListener(event => {
         switch (event.type) {
-            case "connSuccess": {
+            case evt.CONN_SUCCESS: {
                 conn.postMessage({type: "prprConn"})
                 break
             }
@@ -41,7 +38,7 @@ onload = () => {
                 if (!idMap.has(raid_id)) {
                     idMap.add(raid_id)
                     console.log("listen " + title, raid_id)
-                    conn.postMessage({type: "listenRaid", raidCode: raid_id})
+                    conn.postMessage({type: evt.GET_RAID_ID_FROM_LISTEN, raid_id: raid_id})
                 }
             })
         }
@@ -58,7 +55,7 @@ onload = () => {
 
     addEventListener("copy", event => {
         
-        conn.postMessage({type: "copyRaid", raidCode: event.target.value})
+        conn.postMessage({type: evt.GET_RAID_ID_FROM_COPY, raid_id: event.target.value})
         // tryJoinRaid(event.target.value)
     })
 }

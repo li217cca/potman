@@ -1,63 +1,38 @@
 
-var popConn = null, contentConn = null
 const state = default_state
+const str = localStorage.getItem("options")
+console.log( "state", state, str)
+const preState = str.length > 0 ? JSON.parse(str) : {}
 
-const preState = localStorage.getItem("options")
 Object.assign(state, preState)
-const refreshState = () => {
-    if (popConn !== null) popConn.postMessage({type: "getState", state}) 
-    if (contentConn !== null) contentConn.postMessage({type: "getState", state})
-    localStorage.setItem("options", state)
+const conns = []
+const superPostMessage = (msg) => {
+    conns.forEach(conn => {
+        conn.postMessage(msg)
+    })
 }
-const status = {}
-chrome.runtime.onConnect.addListener(function(conn) {
-    // var tab = conn.sender.tab
+const refreshState = () => {
+    superPostMessage({type: evt.GET_STATE, state})
+    localStorage.setItem("options", JSON.stringify(state))
+}
 
-    conn.postMessage({type: "connSuccess"})
+chrome.runtime.onConnect.addListener(function(conn) {
+    console.log("new conn from", conn)
+    conns.push(conn)
+    conn.postMessage({type: evt.CONN_SUCCESS})
     conn.onMessage.addListener(function(event) {
         switch (event.type) {
-            case "requireState": {
-                conn.postMessage({type: "getState", state})
+            case evt.REQUIRE_STATE: {
+                conn.postMessage({type: evt.GET_STATE, state: state})
                 break
             }
-            case "setState": {
+            case evt.SET_STATE: {
                 Object.assign(state, event.state)
                 refreshState()
                 break
             }
-            case "getStatus": {
-                conn.postMessage({type: "status", status: status})
-                break
-            }
-            case "status": {
-                Object.assign(status, event.status)
-                break
-            }
-            case "contentConn": {
-                contentConn = conn
-                break
-            }
-            case "popConn": {
-                popConn = conn
-                break
-            }
-            case "checkBattleKey": {
-                if (contentConn) {
-                    contentConn.postMessage(event)
-                }
-                break
-            }
-            case "copyRaid": {
-                if (contentConn) {
-                    contentConn.postMessage(event)
-                }
-                break
-            }
-            case "listenRaid": {
-                if (contentConn) {
-                    contentConn.postMessage(event)
-                }
-                break
+            default: {
+                superPostMessage(event)
             }
         }
     })

@@ -14,25 +14,25 @@ const _loadExternalScript = function (window) {
     var isShutdown = false;
     var sentHeartbeat = false;
     channelSetup = function (evt) {
-        if (evt.data.type !== "pmInit")
+        if (evt.data.type !== "EXTERNAL_INIT")
             return;
         bhstatic = evt.data.bhstatic;
         moduleIds = evt.data.moduleIds;
         port = evt.ports[0];
         port.onmessage = onWindowMessage;
-        port.postMessage({ type: "pmHello" })
+        port.postMessage({ type: "EXTERNAL_SUCCESS" })
         window.removeEventListener("message", channelSetup, true);
         for (var i = 0, l = pendingMessages.length; i < l; i++)
             port.postMessage(pendingMessages[i]);
-        pendingMessages.length = 0;
-        evt.preventDefault();
-        evt.stopImmediatePropagation();
-        log("External channel established !!!!!!!");
+        pendingMessages.length = 0
+        evt.preventDefault()
+        evt.stopImmediatePropagation()
+        log("channel setup..")
     }
     window.addEventListener("message", channelSetup, true);
     function log(...args) {
         sendMessage({
-            type: "externalLog",
+            type: "EXTERNAL_LOG",
             args: args
         });
     }
@@ -51,10 +51,10 @@ const _loadExternalScript = function (window) {
     var newWebSocket = function WebSocket() {
         var gluedArguments = Array.prototype.concat.apply([null], arguments);
         var boundConstructor = Function.prototype.bind.apply(WebSocket_original, gluedArguments);
-        sendMessage({ type: 'webSocketCreated' });
+        // sendMessage({ type: 'webSocketCreated' });
         var result = new boundConstructor();
         result.addEventListener("message", function (evt) {
-            sendMessage({ type: 'webSocketMessageReceived', data: evt.data });
+            sendMessage({ type: 'WEBSOCKET_RECEIVED', data: evt.data });
         }, true);
         return result;
     };
@@ -331,7 +331,7 @@ const _loadExternalScript = function (window) {
                 case "compatibilityShutdown":
                     doShutdown();
                     return;
-                case "doAjax":
+                case "DO_AJAX":
                     log("onWindowMessage doAjax", evt.data)
                     doAjaxInternal(evt.data);
                     return;
@@ -359,7 +359,7 @@ const _loadExternalScript = function (window) {
         }
         catch (exc) {
             sendMessage({
-                type: 'error',
+                type: 'ERROR',
                 stack: exc.stack
             });
         }
@@ -390,14 +390,14 @@ const _loadExternalScript = function (window) {
         }
 
         jquery.ajax(url, options).then(resp => {
-            sendMessage({ type: 'doAjaxResult', url: url, token: token, result: resp, error: null, failed: false });
+            sendMessage({ type: 'DO_AJAX_RESULT', url: url, token: token, result: resp, error: null, failed: false });
         })
     }
     ;
     function beforeAjax(url, requestData, xhr, uid) {
         if (isShutdown)
             return;
-        sendMessage({ type: 'ajaxBegin', url: url, requestData: requestData, uid });
+        sendMessage({ type: 'AJAX_BEGIN', url: url, requestData: requestData, uid });
     }
     ;
     function afterAjax(state) {
@@ -416,7 +416,7 @@ const _loadExternalScript = function (window) {
             // log("done", url, contentType, requestData);
         }
         sendMessage({
-            type: 'ajaxComplete',
+            type: 'AJAX_COMPLETE',
             url: state.url,
             requestData: state.data,
             responseData: responseData,
