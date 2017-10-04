@@ -10,7 +10,7 @@
       "main/quest.js",
       "main/network.js",
       "main/methods.js",
-      "main/auto_battle.js"
+      "main/hook.js"
     ],
     "matches": [ "http://gbf.game.mbga.jp/*", "http://game.granbluefantasy.jp/*"],
     "run_at": "document_start"
@@ -31,7 +31,9 @@
     "scripts": [
       "public/common.js",
       "public/jquery-2.0.3.min.js",
-      "background/index.js"
+      "background/index.js",
+      "background/api.js",
+      "background/script.js"
     ],
     "persistent": false
   },

@@ -32,8 +32,8 @@ const _loadExternalScript = function (window) {
     window.addEventListener("message", channelSetup, true);
     function log(...args) {
         sendMessage({
-            type: "EXTERNAL_LOG",
-            args: args
+            type: "ACTION_LOG",
+            args: ["EXTE:", ...args]
         });
     }
     

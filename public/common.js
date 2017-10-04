@@ -1,17 +1,43 @@
 
 const default_state = {
+    halt: false,
+
     run: true,
     prpr: false,
     prpr_auto: false,
     coop_run: false,
     coop_first: false,
     auto_battle: false,
-    auto_confirm_pending: false
+    auto_confirm_pending: false,
+
+    ap: 0,
+    bp: 0,
+    lock: false,
+    pending_battle: 0
 }
 
 // TODO
 const evt = {
+    BOSS_DIE: "BOSS_DIE",
+
+    ACTION_PRESS: "ACTION_PRESS",                           // string
+    ACTION_POPUP: "ACTION_POPUP",                           // {msg: string, [ms: int]}
+    ACTION_LOG: "ACTION_LOG",                               // ...args
+
+    ACTION_WAIT_ELEMENT: "ACTION_WAIT_ELEMENT",
+    ACTION_WAIT_REDIRECT: "ACTION_REDIRECT",                // string
+    ACTION_WAIT_LOADING: "ACTION_WAIT_LOADING",             // () =>
+    ACTION_WAIT_PRESS: "ACTION_WAIT_PRESS",                 // string =>
+    ACTION_WAIT_PRESS_AUTO: "ACTION_WAIT_PRESS_AUTO",
+    ACTION_WAIT_PRESS_SKILL: "ACTION_WAIT_PRESS_SKILL",
+    ACTION_WAIT_PRESS_SUMMON: "ACTION_WAIT_PRESS_SUMMON",
+    ACTION_WAIT_SELECT_SUPPORTER: "ACTION_WAIT_SELECT_SUPPORTER",
+    ACTION_WAIT_SELECT_DECK: "ACTION_WAIT_SELECT_DECK",
+    ACTION_WAIT_JOIN_RAID: "ACTION_WAIT_JOIN_RAID",
+    ACTION_WAIT_CONFIRM_PENDING_BATTLE: "ACTION_WAIT_CONFIRM_PENDING_BATTLE",
+
     CONN_SUCCESS: "CONN_SUCCESS",
+    MAIN_CHANNEL: "MAIN_CHANNEL",
 
     EXTERNAL_INIT: "EXTERNAL_INIT",
     EXTERNAL_SUCCESS: "EXTERNAL_SUCCESS",

@@ -1,35 +1,59 @@
 
-const _redirectTo = async (url) => {
-    log("Redirect to", [url])
-    await waitModelRun()
-    location.href = url
-    return waitLoading()
-}
-
-const _pressSkill = async (charID, numbers) => {
-    // TODO FIXME
-    await pressElement(".btn-command-back.display-on")
-    charID -= 1
-    await waitPressElement(".btn-command-character.lis-character" + charID)
-    if (typeof numbers == "number") {
-        await waitPressElement(".prt-command-chara.chara" + charID + ":visible .lis-ability:eq(" + (numbers - 1) + ")")
-    } else {
-        for (let number of numbers) {
-            await waitPressElement(".prt-command-chara.chara" + charID + ":visible .lis-ability:eq(" + (number - 1) + ")")
-            await waitTime(100)
-        }
+const _waitConfirmPendingBattle = async () => {
+    log("try confirm pending battle")
+    await _waitRedirect("/#quest/assist/unclaimed")
+    await waitElement(".prt-raid-list:visible div")
+    if (!await pressElement(".btn-multi-raid.lis-raid:visible:first")) {
+        log("only one battle last")
+        return true
     }
-    await pressElement(".btn-command-back.display-on")
+    await waitElement(".prt-result-head:visible")
+    return _waitConfirmPendingBattle()
 }
 
+const _waitRedirect = async (url) => {
+    log("redirect", url)
+    location.href = url
+    return await waitLoading()
+}
 
-const _waitBattleCount = number => _model.makeWait(state => {
-    _myLog("_waitBattleCount", state.battle_count)
-    return (typeof state.battle_count === "number") && state.battle_count === number
-})
+const _waitBlack = async () => {
+    await waitElement(".btn-attack-start.display-on:visible")
+    return true
+}
+const _waitPressAuto = async () => {
+    return await waitPressElement(".btn-auto:visible")
+}
+
+const _pressSkill = async (charID, number) => {
+    // TODO FIXME
+    await _waitBlack()
+    log("press skill", charID, number)
+    if (await pressElement(".prt-command-chara.chara" + charID + ":visible .lis-ability:eq(" + (number - 1) + ")")) {
+        log("in it success!")
+        await waitTime(Math.random()*50 + 100)
+        return true
+    }
+    if ($(".btn-command-back.display-on:visible").length > 0) {
+        log("press back")
+        await waitPressElement(".btn-command-back.display-on:visible")
+        await waitTime(100)
+    }
+    log('wait press character')
+    while (!($(".prt-command-chara.chara" + charID + ":visible .lis-ability:eq(" + (number - 1) + ")").length > 0)) {
+        await waitPressElement(".btn-command-character.lis-character" + (charID - 1) + ":visible")
+        await waitTime(200)
+        log("try again")
+    }
+    log('wait press skill')
+    await waitPressElement(".prt-command-chara.chara" + charID + ":visible .lis-ability:eq(" + (number - 1) + ")")
+    log("wait time..")
+    await waitTime(Math.random()*50 + 100)
+    return true
+}
+
 
 const _selectSupporter = async (filter) => {
-    await waitModelRun()
     await waitLoading()
 
     await waitElement(selectors.supporterTitle)
@@ -45,7 +69,6 @@ const _selectSupporter = async (filter) => {
                 const tmp = target.attr("data-attribute")
                 const attr = tmp == "10" ? "0" : tmp
                 const func = async () => {
-                    await waitModelRun()
                     await waitLoading()
                     await pressElement(".btn-type[data-type=" + attr + "]")
 
@@ -64,7 +87,6 @@ const _selectSupporter = async (filter) => {
 
 const _selectDeck = async (groupID, number) => {
     log("try select deck")
-    await waitModelRun()
     await waitLoading()
 
     log("press group id =", groupID)
@@ -79,8 +101,14 @@ const _selectDeck = async (groupID, number) => {
     log("press ok")
     return pressElement(".btn-usual-ok.se-quest-start")
 }
+const waitTime = async ms => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
+    })
+}
 
 const _waitLoading = async () => {
     await waitTime(Math.random()*20 + 10)
-    return waitElement("#loading:hidden")
+    await waitElement("#loading:hidden")
+    return true
 }

@@ -1,45 +1,30 @@
-
-const _model = (() => {
-    const _state = {
-        halt: false,
-        run: true,
-        captcha: false,
-        error: false,
+const _waitJoinRaid = async raid_id => {
+    log("try join raid", raid_id)
+    const payload = {
+        special_token: null, 
+        battle_key: raid_id
     }
-    const _listenList = new Set()
-    const _update = (state) => {
-        // _myLog("model state update", state)
-        Object.assign(_state, state)
-        _listenList.forEach(cb => cb())
+    let resp = await clientAjax("/quest/battle_key_check", JSON.stringify(payload))
+    if (typeof resp === "string") resp = JSON.parse(resp)
+    if (resp.popup) {
+        popup(resp.popup.body)
+        return false
     }
-
-    const _makeWait = (func) => {
-        return async () => {
-            return await new Promise((resolve, reject) => {
-                const cb = () => {
-                    if (_state.halt) {
-                        _myLog("process halt...")
-                        reject("process halt")
-                        return
-                    }
-                    if (func(_state) && _state.run && !_state.captcha && !_state.error) {
-                        resolve()
-                        _listenList.delete(cb)
-                    }
-                }
-                _listenList.add(cb)
-                cb()
-            })
-        }
+    if (resp.redirect) {
+        return await waitRedirect(resp.redirect)
     }
-    return {
-        update: _update,
-        makeWait: _makeWait
+    if ((typeof (resp.current_battle_point) === "number") && !resp.battle_point_check) {
+        popup("Refill required, need " + resp.used_battle_point + "bp")
+        return false
     }
-}) ()
-
-const _waitModelRun = _model.makeWait(() => true) // async () =>
-const _waitModelBP3 = _model.makeWait(state => !!state.bp && state.bp > 2) // async () =>
+    if (resp.idleTimeout) {
+        popup("tryJoinRaid idle timeout")
+        return false
+    }
+    popup("tryJoinRaid unknown response: " + JSON.stringify(resp))
+    log("tryJoinRaid unknown response: " + JSON.stringify(resp))
+    return false
+}
 
 const _myLog = (...args) => {
     if (args.length < 1) return
@@ -47,18 +32,9 @@ const _myLog = (...args) => {
     return console.info("[" + time.toLocaleString() + "]", ...args)
 }
 
-const _waitTime = async (ms) => {
-    await _waitModelRun()
-    return new Promise(resolve => {
-        setTimeout(resolve, ms)
-    })
-}
-
 const _waitElement = async (selector) => {
     if (typeof selector !== "string") return selector
-    await _waitModelRun()
     const check = async (resolve) => {
-        await _waitModelRun()
         const jq = $(selector)
         if (jq.length > 0) {
             resolve(jq)
@@ -97,13 +73,13 @@ const _get_rect = function (handle) {
 }
 
 const _pressElement = async (selector) => {
-    await _waitModelRun()
     if (!(selector instanceof jQuery)) {
         selector = $(selector)
     }
     return _pressElementByJQuery(selector)
 }
 const _pressElementByJQuery = function (jq) { // click事件
+    if (jq.length < 0) return false
     var rect = _get_rect(jq)
     if (!(rect.y < 0x1 || rect.x < 0x1)) {
         var x = Math.round(rect.x + Math.random() * rect.w),
@@ -171,41 +147,3 @@ const _popup = (() => {
 }) ()
 
 _waitElement("body").then(_popup.init)
-
-
-const _lock = (() => {
-    let _lock = false, _token = 0
-    const _waitList = []
-    const _unlock = () => {
-        _myLog("Unlock")
-        _lock = false
-        _waitList.filter(cb => {
-            cb()
-            return false
-        })
-    }
-    return {
-        lock: (ms) => {
-            _myLog("Lock for", ms, "ms")
-            _lock = true
-            _token = Math.random() * 100000
-            const preToken = _token
-            setTimeout(() => {
-                if (preToken === _token) {
-                    _unlock()
-                }
-            }, ms)
-        },
-        unlock: _unlock,
-        wait: async () => {
-            await _waitModelRun()
-            return new Promise(resolve => {
-                if (!_lock) {
-                    resolve()
-                } else {
-                    _waitList.push(resolve)
-                }
-            })
-        }
-    }
-}) ()

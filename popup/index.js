@@ -57,12 +57,12 @@ processButton(() => {
 processButton(() => {
     return state.prpr_auto ? "停止自动prpr" : "运行自动prpr"
 }, () => postSetState({prpr_auto: !state.prpr_auto}))
-processButton(() => {
-    return state.coop_run ? "停止coop" : "运行coop"
-}, () => postSetState({coop_run: !state.coop_run}))
-processButton(() => {
-    return state.coop_first ? "coop非尾刀" : "coop尾刀"
-}, () => postSetState({coop_first: !state.coop_first}))
+// processButton(() => {
+//     return state.coop_run ? "停止coop" : "运行coop"
+// }, () => postSetState({coop_run: !state.coop_run}))
+// processButton(() => {
+//     return state.coop_first ? "coop非尾刀" : "coop尾刀"
+// }, () => postSetState({coop_first: !state.coop_first}))
 processButton(() => {
     return state.auto_battle ? "自动战斗开启" : "自动战斗关闭"
 }, () => postSetState({auto_battle: !state.auto_battle}))

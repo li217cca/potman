@@ -1,14 +1,21 @@
 
 
-const _superPostMessage = (msg) => {
+const superPostMessage = (msg) => {
     _conn.postMessage(msg)
     _sandbox.sendExternalMessage(msg)
 }
 const _superOnMessageList = []
-const _superOnMessage = (type, callback) => {
+const superOnMessage = (type, callback) => {
     _superOnMessageList.push({
         type: type,
         callback: callback
+    })
+}
+
+const onPost = (type, callback) => {
+    superOnMessage(type, async event => {
+        const response = await callback(event.request)
+        superPostMessage({type: type + "_CALLBACK", response: response})
     })
 }
 
@@ -23,42 +30,39 @@ const _superListener = (event) => {
 }
 
 // listen message
-_superOnMessage(evt.CONN_SUCCESS, () => {
+superOnMessage(evt.CONN_SUCCESS, () => {
     _myLog("background connection success!")
-    _superPostMessage({type: evt.REQUIRE_STATE})
+    superPostMessage({type: evt.REQUIRE_STATE})
+    superPostMessage({type: evt.MAIN_CHANNEL})
 })
-_superOnMessage(evt.GET_STATE, event => {
-    _myLog("get state from background")
-    modelUpdate(event.state)
+superOnMessage(evt.GET_STATE, event => {
+    // _myLog("get state from background")  
 })
-_superOnMessage(evt.GET_RAID_ID_FROM_LISTEN, event => {
+superOnMessage(evt.GET_RAID_ID_FROM_LISTEN, event => {
     _myLog("get raid id from copy", event.raid_id)
 })
-_superOnMessage(evt.GET_RAID_ID_FROM_LISTEN, event => {
+superOnMessage(evt.GET_RAID_ID_FROM_LISTEN, event => {
     _myLog("get raid id from listen", event.raid_id)
 })
-_superOnMessage(evt.EXTERNAL_SUCCESS, () => {
+superOnMessage(evt.EXTERNAL_SUCCESS, () => {
     _sandbox.finishChannelSetup()
 })
-_superOnMessage(evt.EXTERNAL_LOG, event => {
-    _myLog("EXTERNAL:", ...event.args)
-})
-_superOnMessage(evt.AJAX_BEGIN, event => {
+superOnMessage(evt.AJAX_BEGIN, event => {
     // onAjaxBegin(event.url, event.requestData, event.uid);
 })
 // TODO..
-_superOnMessage(evt.AJAX_COMPLETE, event => {
+superOnMessage(evt.AJAX_COMPLETE, event => {
     _ajaxCompleteListeners.forEach(cb => cb(event)) 
 })
-_superOnMessage(evt.DO_AJAX_RESULT, event => {
+superOnMessage(evt.DO_AJAX_RESULT, event => {
     var callback = _ajaxCallbacks[event.token];
     delete _ajaxCallbacks[event.token];
     callback(event.result, event.error, event.url);
 })
-_superOnMessage(evt.ERROR, event => {
+superOnMessage(evt.ERROR, event => {
     _myLog("ERROR in", event)
 })
-_superOnMessage(evt.WEBSOCKET_RECEIVED, event => {
+superOnMessage(evt.WEBSOCKET_RECEIVED, event => {
     _myLog("websocket message received", event)
     _websocketMessageListeners.forEach(cb => cb(event))
 })
@@ -67,12 +71,10 @@ _superOnMessage(evt.WEBSOCKET_RECEIVED, event => {
 var _nextAjaxToken = 0
 const _ajaxCallbacks = {}
 const _doClientAjax = async (url, data) => {
-    await modelWaitRun()
-
     return new Promise(resolve => {
         const token = ++_nextAjaxToken
         _ajaxCallbacks[token] = resolve
-        _superPostMessage({type: evt.DO_AJAX, token: token, data: data, url: url})
+        superPostMessage({type: evt.DO_AJAX, token: token, data: data, url: url})
     })
 }
 const _websocketMessageListeners = new Set()
