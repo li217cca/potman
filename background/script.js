@@ -1,4 +1,4 @@
-﻿
+
 
 
 
@@ -63,7 +63,7 @@ const autoBattlePrpr = async (raid_id) => {
     log("prpr attack", 2)
     await waitPressAttack()
     log("prpr skill!!")
-    await waitPressSkill(4, 3)
+    await waitPressSkill(2, 3)
     log("prpr attack!!")
     await waitPressAttack()
     await waitPressAuto()
