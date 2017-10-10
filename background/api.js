@@ -27,5 +27,5 @@ const waitSelectSupporter = async filter => post(evt.ACTION_WAIT_SELECT_SUPPORTE
 const waitSelectDeck = async (groupID, number) => post(evt.ACTION_WAIT_SELECT_DECK, {groupID, number})
 const waitJoinRaid = async raid_id => post(evt.ACTION_WAIT_JOIN_RAID, raid_id)
 
-const waitPendingBattle = waitState(state => state.pending_battle > 0)
+const waitPendingBattle = waitState(state => state.pending_battle > 1)
 const waitConfirmPendingBattle = async () => post(evt.ACTION_WAIT_CONFIRM_PENDING_BATTLE)
