@@ -5,6 +5,9 @@ const default_state = {
     run: true,
     prpr: false,
     prpr_auto: false,
+    prpr_deck: [3, 1],
+    prpr_supporter: ["カグヤ", "ホワイトラビット"],
+    prpr_attack: true,
     coop_run: false,
     coop_first: false,
     auto_battle: false,
@@ -13,7 +16,9 @@ const default_state = {
     ap: 0,
     bp: 0,
     lock: false,
-    pending_battle: 0
+    pending_battle: 0,
+
+    dev: false
 }
 
 // TODO
@@ -47,6 +52,8 @@ const evt = {
     AJAX_COMPLETE: "AJAX_COMPLETE",
 
     DO_AJAX: "DO_AJAX",
+    DO_POPUP: "DO_POPUP",
+    DO_CLICK: "DO_CLICK",
     DO_AJAX_RESULT: "DO_AJAX_RESULT",
 
     WEBSOCKET_RECEIVED: "WEBSOCKET_RECEIVED",

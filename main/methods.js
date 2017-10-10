@@ -11,6 +11,7 @@ const waitLoading = _waitLoading    // () =>
 const popup = _popup.popup          // (msg, [ms] int) =>
 
 const listenWebSocket = _listenWebsocketMessage // (cb => bool, [once] bool = true) =>
+const doClientClick = _doClientClick
 const listenAjax = _listenAjaxComplete // (event => bool, [once] bool = true) =>
 const clientAjax = _doClientAjax    // async (url, [data]) => resp
 

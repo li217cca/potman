@@ -45,28 +45,25 @@ const autoBattleAutoPrpr = async (raid_id) => {
 }
 const autoBattlePrpr = async (raid_id) => {
     await waitLock()
-    const token = lock(35000)
+    const token = lock(10000)
     const time = new Date()
     
     log("prpr try join raid", raid_id)
     if (!await waitJoinRaid(raid_id)) {
         log("join raid faild")
+        unlock(token)
         return false
     }
-    await waitSelectSupporter(["カグヤ", "ホワイトラビット"])
-    await waitSelectDeck(3, 1)
+    await waitSelectSupporter(state.prpr_supporter)
+    await waitSelectDeck(...state.prpr_deck)
 
     updateState({pending_battle: state.pending_battle + 1})
 
-    log("prpr attack", 1)
-    await waitPressAttack()
-    log("prpr attack", 2)
-    await waitPressAttack()
-    log("prpr skill!!")
-    await waitPressSkill(2, 3)
-    log("prpr attack!!")
-    await waitPressAttack()
-    await waitPressAuto()
+    if (state.prpr_attack) {
+        log("prpr attack!!")
+        await waitPressAttack()
+        await waitPressAuto()
+    }
 
     unlock(token)
     return true

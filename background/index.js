@@ -1,7 +1,12 @@
 
 const state = default_state
 const str = localStorage.getItem("options")
-const preState = str.length > 0 ? JSON.parse(str) : {}
+let preState = {}
+try {
+    preState = JSON.parse(str)
+} catch(e) {
+    log("error", e)
+}
 
 Object.assign(state, preState)
 const conns = new Set()
@@ -9,6 +14,9 @@ const superPostMessage = (msg) => {
     conns.forEach(conn => {
         conn.postMessage(msg)
     })
+}
+const doPopup = (msg) => {
+    superPostMessage({type: "DO_POPUP", msg: msg})
 }
 const log = (...args) => {
     superPostMessage({type: evt.ACTION_LOG, request: ["BACK:", ...args]})
@@ -61,7 +69,7 @@ const post = async (type, msg) => {
             delete _messageListenList[type + "_CALLBACK"]
             success = true
             _postList.delete(tmp)
-            resolve(event.response)
+            if (state.run) resolve(event.response)
         }
         _postList.add(tmp)
         superPostMessage(tmp)
@@ -108,6 +116,8 @@ chrome.runtime.onConnect.addListener(function(conn) {
             case evt.GET_RAID_ID_FROM_COPY: {
                 if (state.prpr && !_theLock) {
                     autoBattlePrpr(event.raid_id)
+                } else {
+                    doPopup("直前时间中")
                 }
                 break
             }
@@ -131,12 +141,13 @@ chrome.runtime.onConnect.addListener(function(conn) {
         }
     })
 })
-
+// TODO: 任务流，任务Group流等。。。
 let _theLock = false, _lockToken = 0
 const _lock = (ms = 1800000) => {
     console.log("lock for", ms, "ms")
     _theLock = true
     _lockToken = Math.random()*10000
+    _postList.clear()
     const token = _lockToken
     setTimeout(() => {
         unlock(token)
@@ -158,6 +169,7 @@ const _unlock = (token) => {
         error("not token!")
     }
     if (token !== _lockToken && token !== "super") return
+    _postList.clear()
     console.log("unlock", token)
     _theLock = false
     _waitLockList.forEach(callback => callback())

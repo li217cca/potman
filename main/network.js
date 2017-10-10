@@ -35,6 +35,9 @@ superOnMessage(evt.CONN_SUCCESS, () => {
     superPostMessage({type: evt.REQUIRE_STATE})
     superPostMessage({type: evt.MAIN_CHANNEL})
 })
+superOnMessage(evt.DO_POPUP, ({msg}) => {
+    popup(msg)
+})
 superOnMessage(evt.GET_STATE, event => {
     // _myLog("get state from background")  
 })
@@ -63,7 +66,6 @@ superOnMessage(evt.ERROR, event => {
     _myLog("ERROR in", event)
 })
 superOnMessage(evt.WEBSOCKET_RECEIVED, event => {
-    _myLog("websocket message received", event)
     _websocketMessageListeners.forEach(cb => cb(event))
 })
 
@@ -76,6 +78,9 @@ const _doClientAjax = async (url, data) => {
         _ajaxCallbacks[token] = resolve
         superPostMessage({type: evt.DO_AJAX, token: token, data: data, url: url})
     })
+}
+const _doClientClick = (selector) => {
+    superPostMessage({type: evt.DO_CLICK, selector: selector})
 }
 const _websocketMessageListeners = new Set()
 const _listenWebsocketMessage = (callback, once = true) => {

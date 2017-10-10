@@ -94,9 +94,11 @@ const _selectDeck = async (groupID, number) => {
     await pressElement(group)
     await waitLoading()
 
-    log("press list number =", number)
-    const btn = await waitElement(".flex-control-nav.flex-control-paging li:eq(" + (number - 1) + ")")
-    await pressElement(btn)
+    // FIXME: select current one
+    // log("press list number =", number)
+    // const btn = await waitElement(".flex-control-nav.flex-control-paging li:eq(" + (number - 1) + ") a")
+    // btn.trigger("click")
+    // await waitElement(".flex-control-nav.flex-control-paging li:eq(" + (number - 1) + ") a.flex-active")
 
     log("press ok")
     return pressElement(".btn-usual-ok.se-quest-start")

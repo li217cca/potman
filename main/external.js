@@ -318,15 +318,11 @@ const _loadExternalScript = function (window) {
             return;
         try {
             switch (evt.data.type) {
-                case "click":
+                case "DO_CLICK":
                     if (isShutdown)
                         return;
-                    var name = evt.data.name;
-                    var token = evt.data.token;
-                    var tokenAttribute = evt.data.tokenAttribute;
-                    var element = context.document.querySelector(name + "[" + tokenAttribute + "='" + token + "']");
-                    if (element)
-                        generateClick(element, evt.data.asClick);
+                    log("do click", evt)
+                    generateClick(evt.data.selector, true);
                     return;
                 case "compatibilityShutdown":
                     doShutdown();

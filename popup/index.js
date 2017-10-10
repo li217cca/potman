@@ -36,36 +36,96 @@ const onLoad = () => {
 }
 window.addEventListener("load", onLoad, false)
 
-const processButton = (innerTextFunc, onclick) => {
+const processButton = (refreshFunc, onclick) => {
     const cb = () => {
         const button = document.createElement("button")
         button.onclick = onclick
         button.innerText = "loading.."
         document.body.appendChild(button)
         refreshMethods.push(() => {
-            button.innerText = innerTextFunc()
+            refreshFunc(button)
         })
     }
     loadFunc.push(cb)
 }
-processButton(() => {
-    return state.run ? "停止" : "运行"
+processButton(button => {
+    button.style.display = state.dev ? "block" : "none"
+    button.innerText = state.run ? "运行〇" : "运行✕"
 }, () => postSetState({run: !state.run}))
-processButton(() => {
-    return state.prpr ? "停止prpr" : "运行prpr"
+processButton(button => {
+    button.innerText = state.prpr ? "prpr〇" : "prpr✕"
 }, () => postSetState({prpr: !state.prpr}))
-processButton(() => {
-    return state.prpr_auto ? "停止自动prpr" : "运行自动prpr"
+processButton(button => {
+    button.style.display = state.dev ? "block" : "none"
+    button.innerText = state.prpr_auto ? "自动prpr〇" : "自动prpr✕"
 }, () => postSetState({prpr_auto: !state.prpr_auto}))
+const processDeckID = () => {
+    const input = document.createElement("input")
+    input.onchange = ({target}) => {
+        console.log("prpr_deck", target.value.split("").map(a => parseInt(a)).slice(0, 2))
+        postSetState({prpr_deck: target.value.split("").map(a => parseInt(a)).slice(0, 2)})
+    }
+    input.innerText = "loading.."
+    input.style.width = "100%"
+    input.type = "number"
+    input.placeholder = "prpr编组，如（31）"
+    document.body.appendChild(input)
+    refreshMethods.push(() => {
+        input.value = !!state.prpr_deck ? state.prpr_deck.join("") : ""
+    })
+}
+loadFunc.push(processDeckID)
+const processSupporter = () => {
+    const input = document.createElement("input")
+    input.onchange = ({target}) => {
+        if (target.value.length < 1) return
+        console.log("prpr_supporter", target.value.split(" ").filter(key => key.length > 0))
+        postSetState({prpr_supporter: target.value.split(" ").filter(key => key.length > 0)})
+    }
+    input.innerText = "loading.."
+    input.style.width = "100%"
+    input.placeholder = "prpr召唤"
+    document.body.appendChild(input)
+    refreshMethods.push(() => {
+        input.value = state.prpr_supporter.join(" ")
+    })
+}
+loadFunc.push(processSupporter)
+processButton(button => {
+    button.innerText = state.prpr_attack ? "prpr自动攻击〇" : "prpr自动攻击✕"
+}, () => postSetState({prpr_attack: !state.prpr_attack}))
 // processButton(() => {
 //     return state.coop_run ? "停止coop" : "运行coop"
 // }, () => postSetState({coop_run: !state.coop_run}))
 // processButton(() => {
 //     return state.coop_first ? "coop非尾刀" : "coop尾刀"
 // }, () => postSetState({coop_first: !state.coop_first}))
-processButton(() => {
-    return state.auto_battle ? "自动战斗开启" : "自动战斗关闭"
+
+processButton(button => {
+    button.style.display = state.dev ? "block" : "none"
+    button.innerText = state.auto_battle ? "自动战斗〇" : "自动战斗✕"
 }, () => postSetState({auto_battle: !state.auto_battle}))
-processButton(() => {
-    return state.auto_confirm_pending ? "自动确认Raids〇" : "自动确认Raids✕"
+processButton(button => {
+    button.style.display = state.dev ? "block" : "none"
+    button.innerText = state.auto_confirm_pending ? "自动确认Raids〇" : "自动确认Raids✕"
 }, () => postSetState({auto_confirm_pending: !state.auto_confirm_pending}))
+
+const processDev = () => {
+    const input = document.createElement("input")
+    input.onchange = ({target}) => {
+        if (target.value === "DEV") {
+            postSetState({dev: true})
+        }
+    }
+    input.style.width = "100%"
+    input.placeholder = "authentication"
+    document.body.appendChild(input)
+    refreshMethods.push(() => {
+        input.style.display = state.dev ? "none" : "block"
+    })
+}
+loadFunc.push(processDev)
+processButton(button => {
+    button.style.display = state.dev ? "block" : "none"
+    button.innerText = "CLOSE_DEV"
+}, () => postSetState({dev: false}))
