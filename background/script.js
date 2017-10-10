@@ -30,7 +30,7 @@ const autoConfirmPending = async () => {
     updateState({pending_battle: 0})
 
     unlock(token)
-    return autoConfirmPending()
+    autoConfirmPending()
 }
 autoConfirmPending()
 
@@ -45,7 +45,7 @@ const autoBattleAutoPrpr = async (raid_id) => {
 }
 const autoBattlePrpr = async (raid_id) => {
     await waitLock()
-    const token = lock(10000)
+    const token = lock(18000)
     const time = new Date()
     
     log("prpr try join raid", raid_id)
@@ -63,6 +63,7 @@ const autoBattlePrpr = async (raid_id) => {
         log("prpr attack!!")
         await waitPressAttack()
         await waitPressAuto()
+        await waitTime(1000)
     }
 
     unlock(token)
