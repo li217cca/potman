@@ -20,7 +20,7 @@
       "public/jquery-2.0.3.min.js",
       "prpr/index.js"
     ],
-    "matches": ["http://prpr.fkgbf.net/"],
+    "matches": ["http://prpr.fkgbf.net/", "http://prpr.gbf.cat/"],
     "run_at": "document_start",
     "all_frames": true
   } ],
