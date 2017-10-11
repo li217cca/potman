@@ -5,6 +5,7 @@ const unlock = _unlock
 const pressElement = async selector => post(evt.ACTION_PRESS, selector)
 const waitLock = _waitLock
 const waitBossDie = _waitBossDie
+const waitBattleWin = _waitBattleWin
 const waitTime = ms => new Promise(resolve => setTimeout(resolve, ms))
 const waitElement = async selector => post(evt.ACTION_WAIT_ELEMENT, selector)
 const waitLoading = async () => post(evt.ACTION_WAIT_LOADING)

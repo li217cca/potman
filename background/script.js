@@ -126,8 +126,8 @@ const autoBattle = async () => {
         }
     }
 
-    log("wait boss die")
-    await waitBossDie(battle_script.boss_pos)
+    log("wait win!")
+    await waitBattleWin()
     log("redirect..")
     await waitRedirect("/#quest")
 
@@ -136,61 +136,3 @@ const autoBattle = async () => {
     autoBattle()
 }
 autoBattle()
-
-const autoBattlePolarLight = async () => {
-    await waitState(state => state.auto_battle)()
-    await waitLock()
-    const token = lock(600000)
-
-    await waitRedirect("/#quest/supporter/599851/5")
-    await waitSelectSupporter(["シヴァ", "アテナ"])
-    await waitSelectDeck(2, 1)
-    
-    await auto_battle_polar_light_battle_script()
-
-    log("wait redirect", "/#quest")
-    await waitRedirect("/#quest")
-
-    await waitTime(3000)
-    unlock(token)
-    return autoBattlePolarLight()
-}
-
-const auto_battle_polar_light_battle_script = async () => {
-    log("wait switch charge off")
-    await waitSwitchChargeOff()
-    log("wait press attack")
-    await waitPressAttack()
-    log("wait press auto")
-    await waitPressAuto()
-
-    log("wait time", 1000, "ms")
-    await waitTime(1000)
-    
-    log("wait battle count = 3")
-    await waitBattleCount(3)
-    log("wait press auto")
-    await waitPressAuto()
-
-    log("wait press skill")
-    await waitPressSkill(1, 2)
-    await waitPressSkill(1, 3)
-    await waitPressSkill(1, 4)
-    await waitPressSkill(1, 1)
-    await waitPressSkill(2, 4)
-    await waitPressSkill(2, 2)
-    await waitPressSkill(3, 1)
-    await waitPressSkill(4, 3)
-    await waitPressSkill(4, 1)
-
-    log("wait press attack")
-    await waitPressAttack()
-    log("wait press auto")
-    await waitPressAuto()
-
-    log("press charge")
-    await waitSwitchChargeOn()
-
-    log("wait boss die")
-    await waitBossDie()
-}

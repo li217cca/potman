@@ -54,6 +54,7 @@ class Main extends React.Component {
             battle_scripts[script_id] = {
                 ID: script_id,
                 name: "未命名脚本_" + script_id,
+                boss_pos: 0,
                 battle: {
                     stage: [[], [], [], [], []]
                 },
