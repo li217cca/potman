@@ -26,6 +26,7 @@
   } ],
   "name": "科技罐头人",
   "version": "0.2.1",
+  "options_page": "option/index.html",
   "description": "科技罐头人",
   "background": {
     "scripts": [
