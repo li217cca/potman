@@ -123,7 +123,8 @@ listenAjax(data => {
             const count = parseInt(tmp.battle.count)
             log("battle count", count)
             superPostMessage({type: evt.SET_STATE, state: {
-                battle_count: count
+                battle_count: count,
+                battle_count_total: tmp.battle.total
             }})
         }
     }

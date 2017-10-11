@@ -101,6 +101,7 @@ const autoBattle = async () => {
 
     for (let count in stage) {
         if (stage[count].length > 0) {
+            if (parseInt(count + 1) > state.battle_count_total) break
             log("wait battle count", parseInt(count) + 1)
             await waitBattleCount(parseInt(count) + 1)
         }
@@ -131,11 +132,12 @@ const autoBattle = async () => {
     }
 
     log("wait boss die")
+    await waitBattleEnd()
     await waitBossDie()
     log("redirect..")
     await waitRedirect("/#quest")
 
-    await waitTime(3000)
+    await waitTime(5000)
     unlock(token)
     autoBattle()
 }
