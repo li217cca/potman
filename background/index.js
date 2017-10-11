@@ -85,6 +85,14 @@ const _waitBossDie = async (pos) => {
         }
     })
 }
+const _waitBattleWin = async () => {
+    return new Promise(resolve => {
+        _messageListenList[evt.BATTLE_WIN] = (event) => {
+            delete _messageListenList[evt.BATTLE_WIN]
+            resolve(event.next_url)
+        }
+    })
+}
 const updateState = (next) => {
     log("UPDATE STATE", next)
     Object.assign(state, next)
@@ -116,7 +124,11 @@ chrome.runtime.onConnect.addListener(function(conn) {
                 break
             }
             case evt.BOSS_DIE: {
-                log("boss die in", evt.pos)
+                log("boss die in", event.pos)
+                break
+            }
+            case evt.BATTLE_WIN: {
+                log("win! next: ", event.next_url)
                 break
             }
             case evt.GET_RAID_ID_FROM_COPY: {

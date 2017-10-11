@@ -152,6 +152,10 @@ listenAjax(data => {
                     log("boss die", event.pos)
                     superPostMessage({type: evt.BOSS_DIE, pos: event.pos})
                 }
+                if (event.cmd == "win") {
+                    log("win", event.next_url)
+                    superPostMessage({type: evt.BATTLE_WIN, next_url: next_url})
+                }
             })
         }
     }

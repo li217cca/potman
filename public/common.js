@@ -27,6 +27,7 @@ const default_state = {
 // TODO
 const evt = {
     BOSS_DIE: "BOSS_DIE",
+    BATTLE_WIN: "BATTLE_WIN",
 
     ACTION_PRESS: "ACTION_PRESS",                           // string
     ACTION_POPUP: "ACTION_POPUP",                           // {msg: string, [ms: int]}
