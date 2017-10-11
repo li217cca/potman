@@ -34,17 +34,10 @@ const autoConfirmPending = async () => {
 }
 autoConfirmPending()
 let _preAutoPrpr = null
-const _waitPreAutoPrpr = async () => {
-    return new Promise(resolve => {
-        if (_preAutoPrpr === null || new Date() - _preAutoPrpr > 2400000) {
-            resolve()
-        } else {
-            setTimeout(resolve, (2400 - new Date() + _preAutoPrpr) * Math.random() + 1000000)
-        }
-    })
-}
 const autoBattleAutoPrpr = async (raid_id) => {
-    await _waitPreAutoPrpr()
+    if (_preAutoPrpr !== null && new Date() - _preAutoPrpr < 2400000) {
+        return 
+    }
     const resp = await autoBattlePrpr(raid_id)
     log("AUTO PRPR RESP", resp)
     if (!resp) {
@@ -73,7 +66,7 @@ const autoBattlePrpr = async (raid_id) => {
         log("prpr attack!!")
         await waitPressAttack()
         await waitPressAuto()
-        await waitTime(1000)
+        await waitTime(3000)
     }
 
     unlock(token)
