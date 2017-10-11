@@ -75,11 +75,13 @@ const post = async (type, msg) => {
         superPostMessage(tmp)
     })
 }
-const _waitBossDie = async () => {
+const _waitBossDie = async (pos) => {
     return new Promise(resolve => {
         _messageListenList[evt.BOSS_DIE] = (event) => {
-            delete _messageListenList[evt.BOSS_DIE]
-            resolve(event.pos)
+            if (!pos || pos === event.pos) {
+                delete _messageListenList[evt.BOSS_DIE]
+                resolve(event.pos)
+            }
         }
     })
 }
@@ -111,6 +113,10 @@ chrome.runtime.onConnect.addListener(function(conn) {
             }
             case evt.SET_STATE: {
                 updateState(event.state)
+                break
+            }
+            case evt.BOSS_DIE: {
+                log("boss die in", evt.pos)
                 break
             }
             case evt.GET_RAID_ID_FROM_COPY: {

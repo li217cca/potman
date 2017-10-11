@@ -92,7 +92,7 @@ class Main extends React.Component {
             React.createElement("div", null, [
                 React.createElement("div", null, "科技罐头人"),
                 Div(null, 
-                    Select({onChange: (event) => {
+                    Select({value: auto_battle_script_id,onChange: (event) => {
                         console.log("onchange", event.target.value)
                         postSetState({auto_battle_script_id: event.target.value})
                     }}, battle_scripts.map(script => {
