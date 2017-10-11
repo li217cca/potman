@@ -2,6 +2,9 @@
 class AutoBattle extends React.Component {
     render () {
         const {script, onChange} = this.props
+        if (!script) {
+            return "please select a script!"
+        }
         const onNameChange = e => {
             onChange({...script, name: e.target.value})
         }

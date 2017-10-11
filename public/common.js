@@ -13,7 +13,7 @@ const default_state = {
     auto_battle: false,
     auto_battle_url: "",
     auto_battle_script_id: null,
-    battle_scripts: [],
+    battle_scripts: {},
     auto_confirm_pending: false,
 
     ap: 0,
