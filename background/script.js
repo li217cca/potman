@@ -127,8 +127,7 @@ const autoBattle = async () => {
     }
 
     log("wait boss die")
-    await waitBattleEnd()
-    await waitBossDie()
+    await waitBossDie(battle_script.boss_pos)
     log("redirect..")
     await waitRedirect("/#quest")
 
