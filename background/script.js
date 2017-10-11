@@ -94,7 +94,9 @@ const autoBattle = async () => {
 
     for (let count in stage) {
         if (stage[count].length > 0) {
-            if (parseInt(count + 1) > state.battle_count_total) break
+            if (parseInt(count) + 1 > state.battle_count_total) {
+                break
+            }
             log("wait battle count", parseInt(count) + 1)
             await waitBattleCount(parseInt(count) + 1)
         }
