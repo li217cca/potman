@@ -35,13 +35,13 @@ const autoConfirmPending = async () => {
 autoConfirmPending()
 let _preAutoPrpr = null
 const autoBattleAutoPrpr = async (raid_id) => {
-    if (_preAutoPrpr !== null && new Date() - _preAutoPrpr < 2400000) {
+    if (_preAutoPrpr !== null && new Date() < _preAutoPrpr) {
         return 
     }
     const resp = await autoBattlePrpr(raid_id)
     log("AUTO PRPR RESP", resp)
     if (!resp) {
-        _preAutoPrpr = new Date()
+        _preAutoPrpr = new Date(new Date() - 0 + Math.random() * 2000 * 1000 + 1000000)
         return false
     }
     return true
