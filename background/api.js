@@ -12,6 +12,7 @@ const waitRedirect = async url => post(evt.ACTION_WAIT_REDIRECT, url)
 const waitBattleCount = number => waitState(state => state.battle_count === number)()
 const waitPressElement = async selector => post(evt.ACTION_WAIT_PRESS, selector)
 const waitPressSkill = async (charID, number) => post(evt.ACTION_WAIT_PRESS_SKILL, {charID, number})
+const waitPressSummon = async (summonID) => post(evt.ACTION_WAIT_PRESS_SUMMON, summonID)
 const waitPressAttack = async () => post(evt.ACTION_WAIT_PRESS, ".btn-attack-start.display-on:visible")
 const waitPressAuto = async () => post(evt.ACTION_WAIT_PRESS_AUTO, ".btn-auto:visible")
 const waitSwitchChargeOn = async () => {

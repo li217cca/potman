@@ -80,6 +80,67 @@ const autoBattlePrpr = async (raid_id) => {
     return true
 }
 
+const autoBattle = async () => {
+    await waitState(state => state.auto_battle)()
+    await waitLock()
+    const battle_script = state.battle_scripts[state.auto_battle_script_id]
+    await waitState(state => state.ap >= battle_script.ap)()
+    const token = lock(600000)
+
+
+    log("start auto battle", battle_script.name)
+    doPopup("开始运行 " + battle_script.name + " 脚本")
+    log("redirect", battle_script.url)
+    await waitRedirect(battle_script.url)
+    log("select", battle_script.deck.supporter, battle_script.deck.groupID, battle_script.deck.number)
+    await waitSelectSupporter(battle_script.deck.supporter)
+    await waitSelectDeck(battle_script.deck.groupID, battle_script.deck.number)
+
+    const stage = battle_script.battle.stage
+
+
+    for (let count in stage) {
+        if (stage[count].length > 0) {
+            log("wait battle count", parseInt(count) + 1)
+            await waitBattleCount(parseInt(count) + 1)
+        }
+        for (let method of stage[count]) {
+            const args = method.split(" ").filter(k => k.length > 0)
+            log("method", args)
+            switch (args[0]) {
+                case "ATTACK":
+                    await waitPressAttack()
+                    break
+                case "CHARGE_ON":
+                    await waitSwitchChargeOn()
+                    break
+                case "CHARGE_OFF":
+                    await waitSwitchChargeOff()
+                    break
+                case "AUTO":
+                    await waitPressAuto()
+                    break
+                case "SKILL":
+                    await waitPressSkill(parseInt(args[1]), parseInt(args[2]))
+                    break
+                case "SUMMON":
+                    await waitPressSummon(parseInt(args[1]))
+                    break
+            }
+        }
+    }
+
+    log("wait boss die")
+    await waitBossDie()
+    log("redirect..")
+    await waitRedirect("/#quest")
+
+    await waitTime(3000)
+    unlock(token)
+    autoBattle()
+}
+autoBattle()
+
 const autoBattlePolarLight = async () => {
     await waitState(state => state.auto_battle)()
     await waitLock()

@@ -25,6 +25,30 @@ const _waitPressAuto = async () => {
     return await waitPressElement(".btn-auto:visible")
 }
 
+const _pressSummon = async (summonID) => {
+    // TODO FIXME
+    await _waitBlack()
+    log("press summon", summonID)
+    await waitElement(".btn-command-summon:visible")
+    log("press list")
+    await pressElement(".prt-list-top.btn-command-summon:visible")
+    await waitElement(".lis-summon:visible")
+    await waitTime(50)
+
+    log("press summon")
+    await pressElement(".lis-summon.on.btn-summon-available:visible[pos=\"" + summonID + "\"]")
+    await waitElement(".btn-usual-cancel:visible")
+    log("press ok")
+    await pressElement(".btn-usual-ok.btn-summon-use:visible")
+    await waitTime(50)
+
+    await pressElement(".btn-usual-cancel:visible")
+
+    log("wait time..")
+    await waitTime(Math.random()*50 + 100)
+    return true
+}
+
 const _pressSkill = async (charID, number) => {
     // TODO FIXME
     await _waitBlack()

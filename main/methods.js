@@ -18,6 +18,7 @@ const clientAjax = _doClientAjax    // async (url, [data]) => resp
 const waitSelectSupporter = _selectSupporter // async (filter Array[string]) => 
 const waitSelectDeck = _selectDeck      // async (groupID, number) =>
 const waitPressSkill = _pressSkill      // async (charID int, number int) =>
+const waitPressSummon = _pressSummon    // async (summonID) =>
 const waitPressAuto = _waitPressAuto
 const waitJoinRaid = _waitJoinRaid
 const waitConfirmPendingBattle = _waitConfirmPendingBattle
@@ -32,6 +33,7 @@ onPost(evt.ACTION_LOG, log)
 onPost(evt.ACTION_WAIT_PRESS_AUTO, waitPressAuto)
 onPost(evt.ACTION_WAIT_JOIN_RAID, waitJoinRaid)
 onPost(evt.ACTION_WAIT_PRESS_SKILL, ({charID, number}) => waitPressSkill(charID, number))
+onPost(evt.ACTION_WAIT_PRESS_SUMMON, waitPressSummon)
 
 onPost(evt.ACTION_WAIT_SELECT_SUPPORTER, waitSelectSupporter)
 onPost(evt.ACTION_WAIT_SELECT_DECK, ({groupID, number}) => waitSelectDeck(groupID, number))

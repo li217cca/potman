@@ -11,6 +11,9 @@ const default_state = {
     coop_run: false,
     coop_first: false,
     auto_battle: false,
+    auto_battle_url: "",
+    auto_battle_script_id: null,
+    battle_scripts: [],
     auto_confirm_pending: false,
 
     ap: 0,
