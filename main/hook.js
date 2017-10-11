@@ -153,8 +153,8 @@ listenAjax(data => {
                     superPostMessage({type: evt.BOSS_DIE, pos: event.pos})
                 }
                 if (event.cmd == "win") {
-                    log("win", event.next_url)
-                    superPostMessage({type: evt.BATTLE_WIN, next_url: next_url})
+                    log("win", event)
+                    superPostMessage({type: evt.BATTLE_WIN, last: event.is_last_raid})
                 }
             })
         }

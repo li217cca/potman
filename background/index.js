@@ -85,11 +85,13 @@ const _waitBossDie = async (pos) => {
         }
     })
 }
-const _waitBattleWin = async () => {
+const _waitBattleWin = async (needLast) => {
     return new Promise(resolve => {
         _messageListenList[evt.BATTLE_WIN] = (event) => {
-            delete _messageListenList[evt.BATTLE_WIN]
-            resolve(event.next_url)
+            if (event.last || !needLast) {
+                delete _messageListenList[evt.BATTLE_WIN]
+                resolve(event.next_url)
+            }
         }
     })
 }
@@ -128,7 +130,7 @@ chrome.runtime.onConnect.addListener(function(conn) {
                 break
             }
             case evt.BATTLE_WIN: {
-                log("win! next: ", event.next_url)
+                log("win! next: ", event.last)
                 break
             }
             case evt.GET_RAID_ID_FROM_COPY: {
