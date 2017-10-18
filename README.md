@@ -20,6 +20,10 @@ git pull
 
 ## Change Log
 
+### v0.2.1
+* 手动快速舔婊的操作
+* 舔婊对应队伍及召唤可调整
+
 ## License
 
 MIT
