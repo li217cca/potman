@@ -1,8 +1,16 @@
+## Potman Beta 0.2
 
-*科技罐头人*
-*Author: li217cca*
+Potman is a chrome extension
 
-# chrome浏览器插件，用作granbluefantasy游戏辅助。
+# How to install?
+
+// TODO
+
+# License
+
+MIT
+
+# File struct
 
 - root
     - manifest.json                 chrome extensions need
