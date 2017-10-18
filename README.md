@@ -26,4 +26,4 @@ git pull
 
 ## License
 
-MIT
+[MIT licensed](./LICENSE).
