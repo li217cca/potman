@@ -1,8 +1,12 @@
-
+const superPostMessageListener = []
+const listenSuperPostMessage = cb => {
+    superPostMessageListener.push(cb)
+}
 
 const superPostMessage = (msg) => {
     _conn.postMessage(msg)
     _sandbox.sendExternalMessage(msg)
+    superPostMessageListener.forEach(cb => cb(msg))
 }
 const _superOnMessageList = []
 const superOnMessage = (type, callback) => {
@@ -29,6 +33,10 @@ const _superListener = (event) => {
     })
 }
 
+const state = {
+
+}
+
 // listen message
 superOnMessage(evt.CONN_SUCCESS, () => {
     _myLog("background connection success!")
@@ -39,7 +47,8 @@ superOnMessage(evt.DO_POPUP, ({msg}) => {
     popup(msg)
 })
 superOnMessage(evt.GET_STATE, event => {
-    // _myLog("get state from background")  
+    _myLog("get state from background", event.state)  
+    Object.assign(state, event.state)
 })
 superOnMessage(evt.GET_RAID_ID_FROM_LISTEN, event => {
     _myLog("get raid id from copy", event.raid_id)

@@ -110,6 +110,13 @@ processButton(button => {
     button.innerText = state.auto_confirm_pending ? "自动确认Raids〇" : "自动确认Raids✕"
 }, () => postSetState({auto_confirm_pending: !state.auto_confirm_pending}))
 
+processButton(button => {
+    button.innerText = state.coop_run ? "coop〇" : "coop✕"
+}, () => postSetState({coop_run: !state.coop_run}))
+processButton(button => {
+    button.innerText = state.coop_first ? "coop首刀〇" : "coop尾刀"
+}, () => postSetState({coop_first: !state.coop_first}))
+
 const processDev = () => {
     const input = document.createElement("input")
     input.onchange = ({target}) => {

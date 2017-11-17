@@ -10,6 +10,7 @@
       "main/quest.js",
       "main/network.js",
       "main/methods.js",
+      "main/coopraid.js",
       "main/hook.js"
     ],
     "matches": [ "http://gbf.game.mbga.jp/*", "http://game.granbluefantasy.jp/*"],

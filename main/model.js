@@ -26,7 +26,7 @@ const _waitJoinRaid = async raid_id => {
     return false
 }
 
-const _myLog = (...args) => {
+function _myLog(...args) {
     if (args.length < 1) return
     var time = new Date()
     return console.info("[" + time.toLocaleString() + "]", ...args)
