@@ -115,6 +115,20 @@ const joinRaid = (url, supporterID) => {
     })
 }
 
+// hook error
+waitElement(".div:contains(エラー)").then(() => {
+    superPostMessage({type: evt.SET_STATE, state: {
+        run: false
+    }})
+    popup("出现エラー！")
+})
+waitElement(".div:contains(画像認証)").then(() => {
+    superPostMessage({type: evt.SET_STATE, state: {
+        run: false
+    }})
+    popup("出现画像認証！")
+})
+
 listenAjax(data => {
     if (data.url.indexOf("/rest/raid/start.json") > 0) {
 

@@ -1,6 +1,11 @@
 const log = _myLog                  // (...args) =>
 
 const waitElement = _waitElement    // async (selector string) => $(selector + ":visible")
+const watchElement = (selector, callback) => waitElement(selector).then(async (resp) => {
+    await callback(resp)
+    await waitTime(500)
+    return watchElement(selector, callback)
+})
 const pressElement = _pressElement  // async (selector string) =>
 
 const waitPressElement = async (selector) => pressElement(await waitElement(selector))

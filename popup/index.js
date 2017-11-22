@@ -113,9 +113,6 @@ processButton(button => {
 processButton(button => {
     button.innerText = state.coop_run ? "coop〇" : "coop✕"
 }, () => postSetState({coop_run: !state.coop_run}))
-processButton(button => {
-    button.innerText = state.coop_first ? "coop首刀〇" : "coop尾刀"
-}, () => postSetState({coop_first: !state.coop_first}))
 
 const processDev = () => {
     const input = document.createElement("input")

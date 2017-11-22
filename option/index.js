@@ -6,6 +6,8 @@ const Div = (props, children) => React.createElement("div", props, children)
 const Button = (props, children) => React.createElement("button", props, children)
 const Select = (props, children) => React.createElement("select", props, children)
 const Option = (props, children) => React.createElement("option", props, children)
+const AUTO_BATTLE = 0
+const COOP_BATTLE = 1
 class Main extends React.Component {
     constructor (props) {
         super(props)
@@ -26,7 +28,8 @@ class Main extends React.Component {
         })
         this.state = {
             state: {}, 
-            conn: false
+            conn: false,
+            view: 0
         }
     }
     render () {
@@ -40,7 +43,8 @@ class Main extends React.Component {
             })
         }
 
-        let {auto_battle_script_id, battle_scripts} = this.state.state
+        let {auto_battle_script_id, battle_scripts, coop_script} = this.state.state
+        const {view} = this.state
         if (battle_scripts instanceof Array) {
             const tmp = {}
             battle_scripts.forEach(item => {
@@ -89,9 +93,17 @@ class Main extends React.Component {
             battle_scripts[auto_battle_script_id] = script
             postSetState({battle_scripts: battle_scripts})
         }
-        return (
-            React.createElement("div", null, [
-                React.createElement("div", null, "科技罐头人"),
+        const coopBattleOnChange = (script) => {
+            postSetState({coop_script: script})
+        }
+        const content = (() => {
+            switch (view) {
+                case(COOP_BATTLE):
+                return [
+                    React.createElement(CoopBattle, {script: coop_script, onChange: coopBattleOnChange})
+                ]
+            }
+            return [
                 Div(null, 
                     Select({value: auto_battle_script_id,onChange: (event) => {
                         console.log("onchange", event.target.value)
@@ -104,6 +116,13 @@ class Main extends React.Component {
                 Button({onClick: deleteThis}, "deleteThis"),
                 // Button({onClick: resetBattle}, "resetBattle"),
                 React.createElement(AutoBattle, {script: autoBattleScript, onChange: autoBattleOnChange})
+            ]
+        }) ()
+        return (
+            React.createElement("div", null, [
+                React.createElement("div", null, "科技罐头人"),
+                Button({onClick: () => {this.setState({view: (view+1)%2 })}}, "Switch view"),
+                ...content
             ])
         )
         

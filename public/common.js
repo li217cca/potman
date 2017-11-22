@@ -9,7 +9,7 @@ const default_state = {
     prpr_supporter: ["カグヤ", "ホワイトラビット"],
     prpr_attack: true,
     coop_run: false,
-    coop_first: false,
+    coop_script: {},
     auto_battle: false,
     auto_battle_url: "",
     auto_battle_script_id: null,

@@ -1,45 +1,64 @@
+const _coopRun = () => {
+    return state.run && state.coop_run && !state.halt
+}
+log("Auto coop raid init...")
+const pressFresh = async () => {
+    await waitTime(3000)
+    await waitElement(".btn-members-refresh: visible")
+    await pressElement(".btn-members-refresh: visible")
+    pressFresh()
+}
 
-// waitForElementToExist(".txt-title:contains(エラー)", function () {
-//     log("出现错误！"); state.error = true
-// })
-// waitForElementToExist(".prt-popup-header:contains(画像認証)", function () {
-//     log("出现验证码！"); state.captcha = true
-// })
+listenSuperPostMessage(msg => {
+    if (_coopRun() && msg.type == evt.BATTLE_WIN) {
+        log("刷新至共斗")
+        waitRedirect("/#coopraid")
+    }
+})
+watchElement(".prt-result-head", async () => {
+    if (!_coopRun()) return
+    log("刷新至共斗 02")
+    await waitTime(500)
+    await waitRedirect("/#coopraid")
+})
 
+watchElement(".btn-execute-ready.se-ok", async () => {
+    if (!_coopRun()) return
+    await pressElement(".btn-execute-ready.se-ok")
+    log("点击准备")
+})
+watchElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf", () => {
+    if (!_coopRun()) return
+    pressElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf")
+    log("点击start")
+})
+let _isAttack = false
+watchElement(".btn-attack-start.display-on", () => {
+    if (!_coopRun()) return
+    if (state.coop_script.last && !_isAttack) return
+    log("点击攻击")
+    _isAttack = false
+    pressElement(".btn-attack-start.display-on")
+})
 
-// const _autoCoopRun = async () => {
-//     const _thisRun = () => {
-//         return state.run && state.coop_run && !state.error && !state.captcha
-//     }
-//     setInterval(() => {
-//         if (_thisRun()) pressElement(".btn-members-refresh: visible")
-//     }, 3000)
-//     listenSuperPostMessage(msg => {
-//         if (msg.type == evt.BATTLE_WIN) {
-//             waitRedirect("/#coopraid")
-//         }
-//     })
-// }
-
-// var isAttack = false
-// listenAjaxComplete(data => {
-//     if (data.url.indexOf("mvp_info") >= 0) {
-//         if (!!data.responseData && data.responseData.indexOf("point") > 0) {
-//             log("is attack =", true)
-//             isAttack = true
-//         }
-//     }
+listenAjax(data => {
+    if (data.url.indexOf("mvp_info") >= 0) {
+        if (!!data.responseData && data.responseData.indexOf("point") > 0) {
+            log("is attack =", true)
+            _isAttack = true
+        }
+    }
     
-//     if (data.url.indexOf("start.json") >= 0) {
-//         if (!!data.responseData) {
-//             const state = JSON.parse(data.responseData)
-//             log("is attack", state)
-//             const hp = parseInt(state.boss.param[0].hp), hpmax = state.boss.param[0].hpmax
-//             log("is attack ?", hp, hpmax)
-//             isAttack = (hp !== hpmax)
-//         }
-//     }
-// })
+    if (data.url.indexOf("start.json") >= 0) {
+        if (!!data.responseData) {
+            const state = JSON.parse(data.responseData)
+            log("is attack", state)
+            const hp = parseInt(state.boss.param[0].hp), hpmax = state.boss.param[0].hpmax
+            log("is attack ?", hp, hpmax)
+            _isAttack = (hp !== hpmax)
+        }
+    }
+})
 
 // var prepareAttack = null
 // listenWebsocketMessage((data) => {
