@@ -155,22 +155,25 @@ listenAjax(data => {
         }
     }
 })
+const handleScenario = (scenario) => {
+    scenario.forEach(event => {
+        if (event.cmd == "die" && event.to == "boss") {
+            log("boss die", event.pos)
+            superPostMessage({type: evt.BOSS_DIE, pos: event.pos})
+        }
+        if (event.cmd == "win") {
+            log("win", event)
+            superPostMessage({type: evt.BATTLE_WIN, last: event.is_last_raid})
+        }
+    })
+}
 
 listenAjax(data => {
     if (data.url.indexOf("normal_attack_result.json") >= 0) {
         log("try boss die", event)
         if (!!data.responseData) {
             const tmp = JSON.parse(data.responseData)
-            tmp.scenario.forEach(event => {
-                if (event.cmd == "die" && event.to == "boss") {
-                    log("boss die", event.pos)
-                    superPostMessage({type: evt.BOSS_DIE, pos: event.pos})
-                }
-                if (event.cmd == "win") {
-                    log("win", event)
-                    superPostMessage({type: evt.BATTLE_WIN, last: event.is_last_raid})
-                }
-            })
+            handleScenario(tmp.scenario)
         }
     }
 })
@@ -185,9 +188,11 @@ listenWebSocket(tmp => {
     let data = {}
     try {
         data = JSON.parse(tmp.data.slice(2))
+        const tmp = JSON.parse(data)
+        handleScenario(tmp["1"].scenarioPlay.scenario)
         // TODO: 完成hook
     } catch(e) {
-        log("parse error")
+        console.error("handle ws data", err)
         // log(e)
     }
     // const str = data.data
