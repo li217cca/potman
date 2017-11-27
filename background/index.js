@@ -133,6 +133,11 @@ chrome.runtime.onConnect.addListener(function(conn) {
                 log("win! last: ", event.last)
                 break
             }
+            case evt.NEXT_BATTLE: {
+                log("next battle appearance!")
+                updateState({auto_battle: false})
+                break
+            }
             case evt.GET_RAID_ID_FROM_COPY: {
                 if (state.prpr && !_theLock) {
                     autoBattlePrpr(event.raid_id)
