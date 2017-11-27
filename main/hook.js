@@ -176,6 +176,15 @@ listenAjax(data => {
             handleScenario(tmp.scenario)
         }
     }
+    if (data.url.indexOf("result/data") >= 0) {
+        log("listen result data")
+        if (!!data.responseData) {
+            const tmp = JSON.parse(data.responseData)
+            if (!!tmp.appearance) {
+                superPostMessage({type: evt.NEXT_BATTLE, battle: tmp.appearance})
+            }
+        }
+    }
 })
 
 listenWebSocket(tmp => {

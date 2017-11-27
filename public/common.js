@@ -28,6 +28,7 @@ const default_state = {
 const evt = {
     BOSS_DIE: "BOSS_DIE",
     BATTLE_WIN: "BATTLE_WIN",
+    NEXT_BATTLE: "NEXT_BATTLE",
 
     ACTION_PRESS: "ACTION_PRESS",                           // string
     ACTION_POPUP: "ACTION_POPUP",                           // {msg: string, [ms: int]}
