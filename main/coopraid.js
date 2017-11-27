@@ -1,4 +1,4 @@
-const _coopRun = () => {
+﻿const _coopRun = () => {
     return state.run && state.coop_run && !state.halt
 }
 log("Auto coop raid init...")
@@ -18,7 +18,7 @@ listenSuperPostMessage(msg => {
 watchElement(".prt-result-head", async () => {
     if (!_coopRun()) return
     log("刷新至共斗 02")
-    await waitTime(500)
+    await waitTime(200)
     await waitRedirect("/#coopraid")
 })
 
@@ -63,7 +63,7 @@ listenAjax(data => {
 })
 
 listenWebSocket((data) => {
-    if (!state.coop.run()) return
+    if (!_coopRun()) return
     log("listen websocket message", data.data)
     const str = data.data
     const p1 = str.indexOf("point"), p2 = str.indexOf("point", p1+1)

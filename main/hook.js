@@ -1,4 +1,4 @@
-
+﻿
 const validSupporterList = ["カグヤ", "ホワイトラビット"]
 
 const tryJoinRaid = (code) => {
@@ -182,17 +182,19 @@ listenWebSocket(tmp => {
     // TODO: 重写
     // ```
     // 42["raid",{"bossUpdate":{"timestamp":"1508690379.86492200","param":{"boss1_hp":0,"boss1_mode":1,"boss1_mode_gauge":0,"boss1_condition":{"buff":null,"debuff":[{"status":"1103","is_unusable_harb":false,"personal_debuff_user_id":false,"personal_status":"1103","personal_debuff_end_turn":false}],"num":1}}},"mvpUpdate":{"timestamp":"1508690379.86497100","mvpList":[{"viewer_id":"137461580","user_id":"13232517","point":"10010","rank":1}]},"logAdd":{"timestamp":"1508690379.86511800","log":[{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:39] Liccaのパーティが攻撃<br><span class=\"red\">→151ダメージを与えた！</span>","en":"[01:39] Licca's party attacked!<br><span class=\"red\">151 damage!</span>"},"type":1}]}}]
-    // 42["raid",{"bossUpdate":{"timestamp":"1508690168.73298900","param":{"boss1_hp":206479,"boss1_mode":1,"boss1_mode_gauge":0,"boss1_condition":{"buff":null,"debuff":[{"status":"1103","is_unusable_harb":false,"personal_debuff_user_id":false,"personal_status":"1103","personal_debuff_end_turn":false}],"num":1}}},"scenarioPlay":{"timestamp":"1508690168.73303700","user_id":"13232517","scenario":[{"cmd":"effect","to":"boss","kind":"ab_powerup","mode":"serial","name":"","list":"0"},{"cmd":"battlelog","value":"value","title":{"ja":"バトルログ","en":"Battle Log"},"body":{"ja":"Lv65 儚きクリストフが真の力を解放した！","en":"Lvl 65 Christoph Matchstick has unleashed its true power!"}},{"cmd":"boss_gauge","pos":0,"name":{"ja":"Lv65 儚きクリストフ","en":"Lvl 65 Christoph Matchstick"},"attr":1,"hp":236479,"hpmax":1000000,"no_attribute_flag":""},{"cmd":"formchange","form":1,"param":{"attr":1,"name":{"ja":"Lv65 儚きクリストフ","en":"Lvl 65 Christoph Matchstick"},"effect":"ehit_me_0001","cjs":"enemy_2100103","extra_attr":0},"pos":0,"to":"boss","type":null,"no_motion":null,"no_change_motion":null,"bg_image":"/sp/raid/bg/03rc_3.jpg","fullscreen":""}]},"mvpUpdate":{"timestamp":"1508690168.73304600","mvpList":[{"viewer_id":"137461580","user_id":"13232517","point":"7936","rank":1}]},"logAdd":{"timestamp":"1508690168.73359100","log":[{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] チェインバースト！ブルーデトネーションが発動！<br><span class=\"orange\">→1745ダメージを与えた！</span>","en":"[01:36] Chain attack Blue Detonation released!<br><span class=\"orange\">1745 damage!</span>"},"type":3},{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] Liccaのパーティが奥義追加効果を発動！<br><span class=\"yellow\">→666666ダメージを与えた！</span>","en":"[01:36] Licca's party used C.A. Bonus Effect!<br><span class=\"yellow\">666666 damage!</span>"},"type":4},{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] Liccaのパーティが攻撃<br><span class=\"red\">→4693ダメージを与えた！</span>","en":"[01:36] Licca's party attacked!<br><span class=\"red\">4693 damage!</span>"},"type":1}]},"bgmPlay":{"timestamp":"1508690168.73382500","user_id":"13232517","bgm":"bgm/09_battle_quest_03.mp3"}}]
+    // 42["raid",{"bossUpdate":{"timestamp":"1508690168.73298900","param":{"boss1_hp":206479,"boss1_mode":1,"boss1_mode_gauge":0,"boss1_condition":{"buff":null,"debuff":[{"status":"1103","is_unusable_harb":false,"personal_debuff_user_id":false,"personal_status":"1103","personal_debuff_end_turn":false}],"num":1}}},"scenarioPlay":{"timestamp":"1508690168.73303700","user_id":"13232517","scenario":[{"cmd":"effect","to":"boss","kind":"ab_powerup","mode":"serial","name":"","list":"0"},{"cmd":"battlelog","value":"value","title":{"ja":"バトルログ","en":"Battle Log"},"body":{"ja":"Lv65 儚きクリストフが真の力を解放した！","en":"Lvl 65 Christoph Matchstick has unleashed its true power!"}},{"cmd":"boss_gauge","pos":0,"name":{"ja":"Lv65 儚きクリストフ","en":"Lvl 65 Christoph Matchstick"},"attr":1,"hp":236479,"hpmax":1000000,"no_attribute_flag":""},{"cmd":"formchange","form":1,"param":{"attr":1,"name":{"ja":"Lv65 儚きクリストフ","en":"Lvl 65 Christoph Matchstick"},"effect":"ehit_me_0001","cjs":"enemy_2100103","extra_attr":0},"pos":0,"to":"boss","type":null,"no_motion":null,"no_change_motion":null,"bg_image":"/sp/raid/bg/03rc_3.jpg","fullscreen":""}]},"mvpUpdate":{"timestamp":"1508690168.73304600","mvpList":[{"viewer_id":"137461580","user_id":"13232517","point":"7936","rank":1}]},"logAdd":{"timestamp":"1508690168.73359100","log":[{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] チェインバースト！ブルーデトネーションが発動！<br><span class=\"orange\">→1745ダメージを与えた！</span>","en":"[01:36] Chain attack Blue Detonation released!<br><span class=\"orange\">1745 damage!</span>"},"type":3},{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] Liccaのパーティが奥義追加効果を発動！<br><span class=\"yellow\">→666666ダメージを与えた！</span>","en":"[01:36] Licca's party used C.A. Bonus Effect!<br><span class=\"yellow\">666666 damage!</span>"},"type":4},{"viewer_id":"137461580","user_id":"13232517","comment":{"ja":"[01:36] Liccaのパーティが攻撃<br><span class=\"red\">→4693ダメージを与えた！</span>","en":"[01:36] Licca's party attacked!<br><span class=\"red\">4693 damage!</span>"},"type":1}]},"bgmPlay":{"timestamp":"15086901s68.73382500","user_id":"13232517","bgm":"bgm/09_battle_quest_03.mp3"}}]
     // ```
     log("listenWebSocket", tmp)
     let data = {}
     try {
         data = JSON.parse(tmp.data.slice(2))
-        const tmp = JSON.parse(data)
-        handleScenario(tmp["1"].scenarioPlay.scenario)
+	if (!!data[1].battleFinish) {
+            log("win", event)
+            superPostMessage({type: evt.BATTLE_WIN, last: event.is_last_raid})
+	}
         // TODO: 完成hook
     } catch(e) {
-        console.error("handle ws data", err)
+        console.error("handle ws data", e, tmp.data)
         // log(e)
     }
     // const str = data.data
