@@ -78,7 +78,7 @@ const autoBattle = async () => {
     await waitLock()
     const battle_script = state.battle_scripts[state.auto_battle_script_id]
     await waitState(state => state.ap >= battle_script.ap)()
-    const token = lock(600000)
+    const token = lock(480000)
 
 
     log("start auto battle", battle_script.name)
@@ -86,7 +86,8 @@ const autoBattle = async () => {
     log("redirect", battle_script.url)
     await waitRedirect(battle_script.url)
     log("select", battle_script.deck.supporter, battle_script.deck.groupID, battle_script.deck.number)
-    await waitSelectSupporter(battle_script.deck.supporter)
+    const res = await waitSelectSupporter(battle_script.deck.supporter)
+    log("SELECT SUMMON RES=", res)
     await waitSelectDeck(battle_script.deck.groupID, battle_script.deck.number)
 
     const stage = battle_script.battle.stage
