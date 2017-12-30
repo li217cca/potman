@@ -4,8 +4,8 @@
 log("Auto coop raid init...")
 const pressFresh = async () => {
     await waitTime(3000)
-    await waitElement(".btn-members-refresh: visible")
-    await pressElement(".btn-members-refresh: visible")
+    await waitElement(".btn-members-refresh")
+    await pressElement(".btn-members-refresh")
     pressFresh()
 }
 pressFresh()
