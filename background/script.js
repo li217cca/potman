@@ -1,4 +1,4 @@
-
+﻿
 
 
 
@@ -41,14 +41,14 @@ const autoBattleAutoPrpr = async (raid_id) => {
     const resp = await autoBattlePrpr(raid_id)
     log("AUTO PRPR RESP", resp)
     if (!resp) {
-        _preAutoPrpr = new Date(new Date() - 0 + Math.random() * 2000 * 1000 + 1000000)
+        _preAutoPrpr = new Date(new Date() - 0 + Math.random() * 500 * 1000 + 100000)
         return false
     }
     return true
 }
 const autoBattlePrpr = async (raid_id) => {
     await waitLock()
-    const token = lock(18000)
+    const token = lock(24000)
     const time = new Date()
     
     log("prpr try join raid", raid_id)
