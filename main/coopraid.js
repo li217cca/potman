@@ -8,10 +8,11 @@ const pressFresh = async () => {
     await pressElement(".btn-members-refresh: visible")
     pressFresh()
 }
-
-listenSuperPostMessage(msg => {
+pressFresh()
+listenSuperPostMessage(async msg => {
     if (_coopRun() && msg.type == evt.BATTLE_WIN) {
         log("刷新至共斗")
+        await waitTime(300)
         waitRedirect("/#coopraid")
     }
 })
