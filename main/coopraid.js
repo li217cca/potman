@@ -1,54 +1,89 @@
 ﻿const _coopRun = () => {
     return state.run && state.coop_run && !state.halt
 }
-log("Auto coop raid init...")
-const pressFresh = async () => {
-    await waitTime(3000)
-    await waitElement(".btn-members-refresh")
-    await pressElement(".btn-members-refresh")
-    pressFresh()
+let _doneMethod = false
+const setAutorun = async (fn) => {
+    while (1) {
+        const isLoading = await findElement(".loading:visible") || await findElement(".ready:visible")
+        if (isLoading) {
+            log("Loading 中")
+            await waitTime(500)
+            continue
+        }
+        if (_coopRun()) {
+            await fn()
+            _doneMethod = true
+        }
+        
+        await waitTime(100)
+    }
 }
-pressFresh()
+
+setInterval(async () => {
+    if (!_coopRun() || _doneMethod) return
+    log("刷新页面")
+    location.reload()
+}, 10000)
+// log("Auto coop raid init...")
+
 listenSuperPostMessage(async msg => {
     if (_coopRun() && msg.type == evt.BATTLE_WIN) {
+        await waitTime(500)
         log("刷新至共斗")
-        await waitTime(300)
         waitRedirect("/#coopraid")
     }
 })
-watchElement(".prt-result-head", async () => {
-    if (!_coopRun()) return
-    log("刷新至共斗 02")
+
+setAutorun(async () => {
     await waitTime(200)
+    await waitElement(".prt-result-head")
+    await waitTime(50)
+    log("刷新至共斗 02")
     await waitRedirect("/#coopraid")
 })
 
-watchElement(".btn-execute-ready.se-ok", async () => {
-    if (!_coopRun()) return
-    await pressElement(".btn-execute-ready.se-ok")
+setAutorun(async () => {
+    await waitTime(200)
+    await waitPressElement(".btn-execute-ready.se-ok")
     log("点击准备")
+    await waitTime(1000)
 })
-watchElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf", () => {
-    if (!_coopRun()) return
-    pressElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf")
-    log("点击start")
+
+setAutorun(async () => {
+    await waitTime(200)
+    const noAp = await findElement(".btn-use-full.index-1")
+    if (noAp) {
+        await waitPressElement(".btn-use-full.index-1")
+        log("使用小红")
+        await waitTime(300)
+        await waitPressElement(".btn-usual-ok")
+        await waitTime(100)
+    }
+    await waitPressElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf")
+    log("点击START")
+    await waitTime(1000)
 })
+
 let _isAttack = false
-watchElement(".btn-attack-start.display-on", () => {
-    if (!_coopRun()) return
+setAutorun(async () => {
     if (state.coop_script.last && !_isAttack) {
+        log("_isAttack =", _isAttack)
         return
     }
-    log("点击攻击")
+    await waitTime(200)
     _isAttack = false
-    pressElement(".btn-attack-start.display-on")
+    await waitElement(".btn-attack-start.display-on:visible")
+    await waitTime(100)
+    await waitPressSkill(1, 1)
+    log("点击技能")
+    await waitTime(1000)
 })
 
 listenAjax(data => {
     if (data.url.indexOf("mvp_info") >= 0) {
         if (!!data.responseData && data.responseData.indexOf("point") > 0) {
-            log("is attack =", true)
             _isAttack = true
+            log("_isAttack =", _isAttack)
         }
     }
     
@@ -59,6 +94,7 @@ listenAjax(data => {
             const hp = parseInt(state.boss.param[0].hp), hpmax = state.boss.param[0].hpmax
             log("is attack ?", hp, hpmax)
             _isAttack = (hp !== hpmax)
+            log("_isAttack =", _isAttack)
         }
     }
 })
@@ -73,6 +109,7 @@ listenWebSocket((data) => {
     log("battle point", point1, point2)
     if (point1 > 0 || point2 > 0) {
         _isAttack = true
+        log("point > 0, is_attack =", _isAttack)
     }
 })
 // var waitPress = false

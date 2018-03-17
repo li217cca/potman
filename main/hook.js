@@ -203,7 +203,7 @@ listenWebSocket(tmp => {
 	}
         // TODO: 完成hook
     } catch(e) {
-        console.error("handle ws data", e, tmp.data)
+        // console.error("handle ws data", e, tmp.data)
         // log(e)
     }
     // const str = data.data

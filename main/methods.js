@@ -10,6 +10,10 @@ const pressElement = _pressElement  // async (selector string) =>
 
 const waitPressElement = async (selector) => pressElement(await waitElement(selector))
 const waitRedirect = _waitRedirect      // async (url) =>
+const findElement = async (selector) => new Promise((resolve, reject) => {
+    waitElement(selector).then(() => resolve(true))
+    waitTime(20).then(() => resolve(false))
+})
 
 const waitLoading = _waitLoading    // () => 
 

@@ -129,7 +129,7 @@ const _selectDeck = async (groupID, number) => {
 }
 const waitTime = async ms => {
     return new Promise(resolve => {
-        setTimeout(resolve, ms)
+        setTimeout(resolve, ms * (3.5 + Math.random()) * 0.25)
     })
 }
 
