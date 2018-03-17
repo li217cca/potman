@@ -62,6 +62,8 @@ setAutorun(async () => {
     await waitTime(200)
     const noAp = await findElement(".btn-use-full.index-1")
     if (noAp) {
+        // await waitTime(200)
+        // $(".use-item-num:last option:contains(" + parseInt(10 + (Math.random()-0.5)*6) + ")")[0].selected = true
         await waitPressElement(".btn-use-full.index-1")
         log("使用小红")
         await waitTime(300)
