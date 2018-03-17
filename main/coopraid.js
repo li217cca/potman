@@ -11,8 +11,7 @@ const setAutorun = async (fn) => {
             continue
         }
         if (_coopRun()) {
-            await fn()
-            _doneMethod = true
+            _doneMethod = await fn()
         }
         
         await waitTime(100)
@@ -35,11 +34,20 @@ listenSuperPostMessage(async msg => {
 })
 
 setAutorun(async () => {
+    await waitTime(3000)
+    await waitElement(".btn-members-refresh")
+    log("刷新共斗成员")
+    await waitPressElement(".btn-members-refresh")
+    return true
+})
+
+setAutorun(async () => {
     await waitTime(200)
     await waitElement(".prt-result-head")
     await waitTime(50)
     log("刷新至共斗 02")
     await waitRedirect("/#coopraid")
+    return true
 })
 
 setAutorun(async () => {
@@ -47,6 +55,7 @@ setAutorun(async () => {
     await waitPressElement(".btn-execute-ready.se-ok")
     log("点击准备")
     await waitTime(1000)
+    return true
 })
 
 setAutorun(async () => {
@@ -62,21 +71,23 @@ setAutorun(async () => {
     await waitPressElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf")
     log("点击START")
     await waitTime(1000)
+    return true
 })
 
 let _isAttack = false
 setAutorun(async () => {
+    await waitTime(200)
+    await waitElement(".btn-attack-start.display-on:visible")
     if (state.coop_script.last && !_isAttack) {
         log("_isAttack =", _isAttack)
-        return
+        if (!Array.prototype.slice.call($(".txt-point")).find(item => false && item.innerText != '0pt')) return false
     }
-    await waitTime(200)
     _isAttack = false
-    await waitElement(".btn-attack-start.display-on:visible")
     await waitTime(100)
     await waitPressSkill(1, 1)
     log("点击技能")
     await waitTime(1000)
+    return true
 })
 
 listenAjax(data => {

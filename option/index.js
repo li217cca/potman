@@ -100,10 +100,14 @@ class Main extends React.Component {
             switch (view) {
                 case(COOP_BATTLE):
                 return [
+                    Div({float: "left", fontSize: 30}, "共斗选项"),
+                    Div(),
                     React.createElement(CoopBattle, {script: coop_script, onChange: coopBattleOnChange})
                 ]
             }
             return [
+                Div({float: "left", fontSize: 30}, "自动战斗选项"),
+                Div(),
                 Div(null, 
                     Select({value: auto_battle_script_id,onChange: (event) => {
                         console.log("onchange", event.target.value)
