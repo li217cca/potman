@@ -21,7 +21,11 @@
       "public/jquery-2.0.3.min.js",
       "prpr/index.js"
     ],
-    "matches": ["http://prpr.fkgbf.net/", "http://prpr.gbf.cat/"],
+    "matches": [
+      "http://prpr.fkgbf.net/", 
+      "http://prpr.gbf.cat/",
+      "http://granblue-raidfinder.herokuapp.com/"
+    ],
     "run_at": "document_start",
     "all_frames": true
   } ],
