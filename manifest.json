@@ -24,7 +24,8 @@
     "matches": [
       "http://prpr.fkgbf.net/", 
       "http://prpr.gbf.cat/",
-      "http://granblue-raidfinder.herokuapp.com/"
+      "http://granblue-raidfinder.herokuapp.com/",
+      "https://gbf-raidfinder.la-foret.me/"
     ],
     "run_at": "document_start",
     "all_frames": true
