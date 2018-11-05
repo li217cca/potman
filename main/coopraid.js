@@ -70,7 +70,7 @@ setAutorun(async () => {
         await waitPressElement(".btn-usual-ok")
         await waitTime(100)
     }
-    await waitPressElement(".btn-quest-start.multi.se-quest-start.onm-tc-gbf")
+    await waitPressElement(".btn-quest-start")
     log("点击START")
     await waitTime(1000)
     return true
