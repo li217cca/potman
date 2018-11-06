@@ -21,7 +21,9 @@ class CoopBattle extends React.Component {
         }
         return (
             Div(null, [
-                Button({onClick: change("last", !script.last)}, script.last ? "尾刀〇" : "尾刀✕")
+                Button({onClick: change("last", !script.last)}, script.last ? "尾刀〇" : "尾刀✕"),
+                Button({onClick: change("main", !script.main)}, script.main ? "主机〇" : "主机✕"),
+                Button({onClick: change("eat", !script.eat)}, script.eat ? "自动食药〇" : "自动食药✕"),
             ])
         )
     }

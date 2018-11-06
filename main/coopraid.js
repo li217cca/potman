@@ -57,21 +57,28 @@ setAutorun(async () => {
     await waitTime(1000)
     return true
 })
-
 setAutorun(async () => {
     await waitTime(200)
     const noAp = await findElement(".btn-use-full.index-1")
     if (noAp) {
         // await waitTime(200)
         // $(".use-item-num:last option:contains(" + parseInt(10 + (Math.random()-0.5)*6) + ")")[0].selected = true
-        await waitPressElement(".btn-use-full.index-1")
-        log("使用小红")
-        await waitTime(300)
-        await waitPressElement(".btn-usual-ok")
-        await waitTime(100)
+        if (state.coop_script.eat) {
+            await waitPressElement(".btn-use-full.index-1")
+            log("使用小红")
+            await waitTime(300)
+            await waitPressElement(".btn-usual-ok")
+            await waitTime(100)
+        } else {
+            log('脚本停止')
+            superPostMessage({type: evt.SET_STATE, state: {run: false}})
+            return true
+        }
     }
-    await waitPressElement(".btn-quest-start")
-    log("点击START")
+    if (state.coop_script.main) {
+        await waitPressElement(".btn-quest-start")
+        log("点击START")
+    }
     await waitTime(1000)
     return true
 })

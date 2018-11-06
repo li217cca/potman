@@ -168,12 +168,20 @@ const handleScenario = (scenario) => {
     })
 }
 
+const event_uris = [
+    'ability_result.json',
+    'normal_attack_result.json',
+]
+
 listenAjax(data => {
-    if (data.url.indexOf("normal_attack_result.json") >= 0) {
-        log("try boss die", event)
-        if (!!data.responseData) {
-            const tmp = JSON.parse(data.responseData)
-            handleScenario(tmp.scenario)
+    for (uri of event_uris) {
+        if (data.url.indexOf(uri) >= 0) {
+            log("try boss die", event)
+            if (!!data.responseData) {
+                const tmp = JSON.parse(data.responseData)
+                handleScenario(tmp.scenario)
+                break
+            }
         }
     }
     if (data.url.indexOf("result/data") >= 0) {
