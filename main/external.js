@@ -383,8 +383,12 @@ const _loadExternalScript = function (window) {
         if (data) {
             options.data = data;
             options.method = "POST";
+            options.dataType = 'json'
+            options.contentType = 'application/json'
+
         }
 
+        url = url+'?_='+(new Date).getTime()
         jquery.ajax(url, options).then(resp => {
             sendMessage({ type: 'DO_AJAX_RESULT', url: url, token: token, result: resp, error: null, failed: false });
         })
